@@ -5,7 +5,7 @@ import os
 
 
 
-url_base = 'http://opendata.camara.cl/camaradiputados/WServices/'
+url_base  = 'http://opendata.camara.cl/camaradiputados/WServices/'
 url_base2 = 'http://opendata.camara.cl/wscamaradiputados.asmx/'
 
 
