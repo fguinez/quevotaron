@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print(votacion.ausentes_partido)
 
     titulo = "Tercer retiro del 10%"#input("Título de la ley: ")
-    create_image(votacion, titulo, group='coalicion')
+    create_image(votacion, titulo, group='partido')
     '''
     get_diputados()
     prmVotacionID = 36336

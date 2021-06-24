@@ -13,12 +13,15 @@ section = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
 
 
 
-def sort_coaliciones(coaliciones):
-    coaliciones = list(coaliciones)
-    if 'SC' in list(coaliciones):
-        coaliciones.remove('SC')
-        coaliciones.append('SC')
-    return coaliciones
+def sort_group(group):
+    group = list(group)
+    if 'SC' in list(group):
+        group.remove('SC')
+        group.append('SC')
+    if 'IND' in list(group):
+        group.remove('IND')
+        group.append('IND')
+    return group
 
 def draw_points(draw, iniX, iniY, votos, cols=20, group='coalicion'):
     color_group = color_partido if group == 'partido' else color_coalicion
@@ -27,7 +30,7 @@ def draw_points(draw, iniX, iniY, votos, cols=20, group='coalicion'):
     initX = iniX + R
     initY = iniY + R
     d = 0
-    for group in sort_coaliciones(votos.keys()):
+    for group in sort_group(votos.keys()):
         color = color_group(group)
         for _ in range(votos[group]):
             i = d %  cols
