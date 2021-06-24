@@ -13,6 +13,8 @@ url_base2 = 'http://opendata.camara.cl/wscamaradiputados.asmx/'
 
 def get_xml(url):
     xml_str = requests.get(url = url).text
+    if len(xml_str) < 500:                                  # Si no llega respuesta con contenido
+            raise Exception(f"Respuesta incompleta. Intenta más tarde.\nURL: {url}")
     return xml_str
 
 def _get_data(path, url, force_request=False):
