@@ -1,3 +1,7 @@
+'''
+Propósito del módulo: Abstraer la generación de gráficas a diferentes contextos
+'''
+
 # https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
 from PIL import Image, ImageDraw, ImageFont
 from math import ceil
@@ -43,7 +47,7 @@ def draw_points(draw, iniX, iniY, votos, cols=20, group='coalicion'):
     endY = initY +    j*R*2 + R
     return endX, endY
 
-def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion'):
+def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion', ):
     color_group = color_partido if group == 'partido' else color_coalicion
     R = 20
     r = 0.7 * R
@@ -63,7 +67,83 @@ def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion'):
     endY = initY +    j*R*2 + R
     return endX, endY
 
-def create_image(votacion, titulo, group='coalicion'):
+def create_image(titulo, opcionesH, opcionesV, grupos):
+    '''
+    ----------
+    PARÁMETROS
+    ----------
+
+    [titulo]    (str) Texto de encabezado
+
+
+    [opcionesH] Una estructura de la forma:
+                {
+                    <opcion1>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n},
+                    <opcion2>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n},
+                    ...,
+                    <opcionN>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n}
+                }
+
+                Ejemplo:
+                {
+                    "Apruebo":   {"PD": 13, "PR": 7, "IND": 5},
+                    "Abstengo":  {"PD": 5, "PR": 15, "IND": 5},
+                    "En Contra": {"PR": 25},
+                }
+
+                Estas opciones serán incluídas de la forma:
+         ------------------------------------------------------------------
+        |    votos option1    |   votos option2   |...|   votos optionN    |
+         ------------------------------------------------------------------
+
+
+    [opcionesV] Una estructura de la forma:
+                {
+                    <opcion1>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n},
+                    <opcion2>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n},
+                    ...,
+                    <opcionN>: {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n}
+                }
+
+                Ejemplo:
+                {"Ausentes": {"PD": 5, "PR": 8, "IND": 2}}
+
+                Estas opciones serán incluídas de la forma:
+                         --------------------
+                        |    votos option1   |
+                         --------------------
+                        |    votos option2   |
+                         --------------------
+                                    ...
+                         --------------------
+                        |    votos optionN   |
+                         --------------------
+
+    
+    [grupos]    Estructura que caracterisa a los grupos presentes en opcionesH
+                y opcionesV. Normalmente estos grupos serán partidos, bancadas
+                o coaliciones. Su forma será:
+                {
+                    <sigla1>: [<nombre1>, <color1>],
+                    ...,
+                    <siglaN>: [<nombreN>, <colorN>]
+                }
+
+                Un ejemplo sería:
+                {
+                    "PD": ["Partido Demócrata", "#f58231"],
+                    ...,
+                    "PR": ["Partido Republicano", "#911eb4"]
+                }
+
+
+    -------
+    RETURNA
+    -------
+    Una imagen con los datos ingresados
+    '''
+    # TO-DO: El código de esta función no se ha actualizado acorde a la nueva 
+    # documentación
     if group.lower() == 'coalicion':
         votos_a_favor    = votacion.a_favor_coalicion
         votos_abstencion = votacion.abstencion_coalicion
@@ -109,4 +189,5 @@ def create_image(votacion, titulo, group='coalicion'):
     _, endY = draw_pareos(draw, iniX, iniY, votos_pareos, total_col+3, group)
 
 
-    im.show()
+    #im.show()
+    return im
