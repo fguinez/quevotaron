@@ -1,6 +1,7 @@
 from pprint import pprint
 from votaciones_handler import get_votacion
 from draw.draw import create_image
+import sys
 
 
 
@@ -12,6 +13,8 @@ from draw.draw import create_image
 
 if __name__ == "__main__":
     votid = 36472#int(input("Ingresa un ID de votación: "))
+    if len(sys.argv) > 1:
+        votid = int(sys.argv[1])
     votacion = get_votacion(votid)
     print(votacion)
     print(votacion.a_favor_partido)
@@ -20,6 +23,8 @@ if __name__ == "__main__":
     print(votacion.ausentes_partido)
 
     titulo = "Tercer retiro del 10%"#input("Título de la ley: ")
+    if len(sys.argv) > 2:
+        titulo = sys.argv[2]
     create_image(votacion, titulo, group='partido')
     '''
     get_diputados()
