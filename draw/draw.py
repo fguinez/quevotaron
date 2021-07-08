@@ -67,7 +67,7 @@ def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion', ):
     endY = initY +    j*R*2 + R
     return endX, endY
 
-def create_image(titulo, opcionesH, opcionesV, grupos):
+def create_image(titulo, opcionesH, opcionesV, grupos, pareos=None):
     '''
     ----------
     PARÁMETROS
@@ -132,9 +132,17 @@ def create_image(titulo, opcionesH, opcionesV, grupos):
                 Un ejemplo sería:
                 {
                     "PD": ["Partido Demócrata", "#f58231"],
-                    ...,
                     "PR": ["Partido Republicano", "#911eb4"]
                 }
+
+
+    (pareos)    Opcional: Si no es ingresado, no se imprimirán pareos en la
+                votación. Si es ingresado, debe ser una lista de los pareos con
+                la forma:
+                [(<grupo1>, <grupo2>), (<grupo3>, <grupo4>), ...]
+
+                Por ejemplo:
+                [("PD", "PR"), ("PD", "PR"), ("PD", "IND")]
 
 
     -------
