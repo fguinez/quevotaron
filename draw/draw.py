@@ -67,13 +67,39 @@ def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion', ):
     endY = initY +    j*R*2 + R
     return endX, endY
 
-def create_image(titulo, opcionesH, opcionesV, grupos, pareos=None):
+def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, grupos={},
+                 opcionesH={}, opcionesV={}, pareos=[]):
     '''
     ----------
     PARÁMETROS
     ----------
 
     [titulo]    (str) Texto de encabezado
+
+    [subtitulo] (str) Subtítulo bajo el encabezado
+
+    [resultado] (str) Resultado de la votación, normalmente Aprobado o Rechazado
+
+    [quorum]    (str) Nombre del quorum
+
+    [nquorum]   (int) Cantidad de votos necesario para aprobar. Si su valor es -1
+                se omite la información referida al quorum en la imagenc creada.
+
+
+    [grupos]    Estructura que caracterisa a los grupos presentes en opcionesH
+                y opcionesV. Normalmente estos grupos serán partidos, bancadas
+                o coaliciones. Su forma será:
+                {
+                    <sigla1>: [<nombre1>, <color1>],
+                    ...,
+                    <siglaN>: [<nombreN>, <colorN>]
+                }
+
+                Un ejemplo sería:
+                {
+                    "PD": ["Partido Demócrata", "#f58231"],
+                    "PR": ["Partido Republicano", "#911eb4"]
+                }
 
 
     [opcionesH] Una estructura de la forma:
@@ -120,23 +146,7 @@ def create_image(titulo, opcionesH, opcionesV, grupos, pareos=None):
                          --------------------
 
     
-    [grupos]    Estructura que caracterisa a los grupos presentes en opcionesH
-                y opcionesV. Normalmente estos grupos serán partidos, bancadas
-                o coaliciones. Su forma será:
-                {
-                    <sigla1>: [<nombre1>, <color1>],
-                    ...,
-                    <siglaN>: [<nombreN>, <colorN>]
-                }
-
-                Un ejemplo sería:
-                {
-                    "PD": ["Partido Demócrata", "#f58231"],
-                    "PR": ["Partido Republicano", "#911eb4"]
-                }
-
-
-    (pareos)    Opcional: Si no es ingresado, no se imprimirán pareos en la
+    [pareos]    Si no es ingresado, no se imprimirán pareos en la
                 votación. Si es ingresado, debe ser una lista de los pareos con
                 la forma:
                 [(<grupo1>, <grupo2>), (<grupo3>, <grupo4>), ...]
