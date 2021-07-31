@@ -2,8 +2,8 @@ from collections import namedtuple
 import time
 import os
 
-from models import Diputado
-import api_handler as api
+from diputados.models import Diputado
+import diputados.api as api
 
 
 
@@ -14,7 +14,7 @@ Militancia = namedtuple('Militancia', ['partido','coalicion','nombre'])
 
 
 def get_coaliciones():
-    path = "data/coaliciones.csv"
+    path = "diputados/data/coaliciones.csv"
     with open(path, 'r') as file:
         lines = file.readlines()
         lines = (line.strip().split(',') for line in lines)
@@ -36,7 +36,7 @@ def get_militancia(militancias):
     return ultima_militancia
 
 def get_militancias():
-    path = "data/militancias.csv"
+    path = "diputados/data/militancias.csv"
     if os.path.isfile(path):
         with open(path, 'r') as file:
             file.readline()                                          # Ignorar encabezado

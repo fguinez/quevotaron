@@ -97,6 +97,30 @@ class Votacion:
             my_dict[elem] = 1
         return my_dict
 
+    @property
+    def info_partido(self):
+        opcionesH = {
+            "A favor": self.a_favor_partido,
+            "Abstienen": self.abstencion_partido,
+            "En contra": self.en_contra_partido
+        }
+        opcionesV = {
+            "Ausentes": self.ausentes_partido
+        }
+        return opcionesH, opcionesV, self.pareos_partido
+
+    @property
+    def info_coalicion(self):
+        opcionesH = {
+            "A favor": self.a_favor_coalicion,
+            "Abstienen": self.abstencion_coalicion,
+            "En contra": self.en_contra_coalicion
+        }
+        opcionesV = {
+            "Ausentes": self.ausentes_coalicion
+        }
+        return opcionesH, opcionesV, self.pareos_coalicion
+
     def __str__(self):
         text  = ""
         text += f"id:     {self.id}\n"

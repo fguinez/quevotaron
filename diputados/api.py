@@ -29,33 +29,33 @@ def _get_data(path, url, force_request=False):
     return data
 
 def get_diputados_periodo(force_request=False):
-    path = 'data/diputados_periodo.xml'
+    path = 'diputados/data/diputados_periodo.xml'
     url = url_base + 'WSDiputado.asmx/retornarDiputadosPeriodoActual'
     data = _get_data(path, url, force_request=force_request)
     return data
 
     
 def get_diputados_vigentes(force_request=False):
-    path = 'data/diputados_vigentes.xml'
+    path = 'diputados/data/diputados_vigentes.xml'
     url = 'http://opendata.camara.cl/wscamaradiputados.asmx/getDiputados_Vigentes'
     data = _get_data(path, url, force_request=force_request)
     return data
 
 
 def get_diputados():
-    path = 'data/diputados.xml'
+    path = 'diputados/data/diputados.xml'
     url = url_base + 'WSDiputado.asmx/retornarDiputados'
     data = _get_data(path, url)
     return data
 
 def get_proyecto(prmNumeroBoletin):
-    path = f'data/proyectos/{prmNumeroBoletin}.xml'
+    path = f'diputados/data/proyectos/{prmNumeroBoletin}.xml'
     url = url_base + f'WSLegislativo.asmx/retornarVotacionesXProyectoLey?prmNumeroBoletin={prmNumeroBoletin}'
     data = _get_data(path, url)
     return data
 
 def get_votacion(prmVotacionID):
-    path = f'data/votaciones/{prmVotacionID}.xml'
+    path = f'diputados/data/votaciones/{prmVotacionID}.xml'
     url = url_base2 + f'getVotacion_Detalle?prmVotacionID={prmVotacionID}'
     data = _get_data(path, url)
     return data

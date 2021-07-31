@@ -112,8 +112,8 @@ def draw_legend(draw, lenX, iniY, grupos):
     global_endX = 1080 - global_iniX
     global_iniY = iniY
     iniX = global_iniX
-    for grupo in grupos:
-        endX = iniX + 40 + draw.textsize(grupo[0], font=normal) + 20
+    for grupo in grupos.values():
+        endX = iniX + 40 + draw.textsize(grupo[0], font=normal)[0] + 20
         if endX > global_endX:
             iniY += 40
         x = iniX + R
@@ -136,7 +136,7 @@ def sum_votes(conjuntos):
     for conjunto in conjuntos:
         if isinstance(conjunto, dict):
             for option in conjunto:
-                votes += sum(option.values())
+                votes += sum(conjunto[option].values())
         elif isinstance(conjunto, list):
             votes += len(conjunto) * 2
     return votes
@@ -236,7 +236,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     Una imagen con los datos ingresados
     '''
     # Abre imagen vacía
-    im   = Image.open("img/plantilla.png")
+    im   = Image.open("draw/img/plantilla.png")
     draw = ImageDraw.Draw(im)
 
     # Escribe encabezado
@@ -253,15 +253,17 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     global_iniY = 350
         #   Horizontal
     total_colH = total_col - len(opcionesH)
-    votosH = sum_votes((opcionesH))
-    filas = ceil(votan / total_colH)
+    votosH = sum_votes((opcionesH,))
+    filas = ceil(votosH / total_colH)
     iniX, iniY  = (global_iniX, global_iniY)
     endY_max = -1
     posX = [] # Guarda las posiciones de inicio y término de cada opción
     for opcion in opcionesH:
         #TODO: Nombre de la opción escrito en vertical
         iniX += 40
-        columnas = ceil(opcion / filas)
+        if filas == 0:
+            continue
+        columnas = ceil(votosH / filas)
         endX, endY = draw_points(draw, iniX, iniY, opcionesH[opcion], columnas, grupos)
         posX.append((iniX-40, endX))
         iniX = endX
@@ -278,7 +280,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         #TODO: Nombre de la opción escrito en horizontal
         iniY += 40
         # Dibujar votos en vertical
-        _, endY = draw_points(draw, iniX, iniY, opcion, total_col, grupos)
+        _, endY = draw_points(draw, iniX, iniY, opcionesV[opcion], total_col, grupos)
         #TODO: Cuadro delimitador de opcion
         iniY = endY
     if len(pareos) > 0:
@@ -288,7 +290,8 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         iniY = endY
     
     # Dibuja leyenda
-    draw_legend(lenX, iniY+80, grupos)
+    lenX = 40*total_col
+    draw_legend(draw, lenX, iniY+80, grupos)
 
     # Dibuja banner inferior
     # TODO: Dibujar banner inferior

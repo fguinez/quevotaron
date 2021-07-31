@@ -1,6 +1,6 @@
-from models import Votacion
-from diputados_handler import get_diputados
-import api_handler as api
+from   diputados.models import Votacion
+from   diputados.handler import get_diputados
+import diputados.api as api
 
 
 

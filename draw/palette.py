@@ -3,6 +3,39 @@ import random
 
 
 
+
+partidos = {
+    'CS':   ['Convergencia Social',                  '#911eb4'],
+    'CO':   ['Comunes',                              '#f032e6'],
+    'RD':   ['Revolución Democrátiva',               '#dcbeff'],
+    'UN':   ['Unir',                                 '#fabed4'],
+    'PC':   ['Partico Comunista',                    '#e6194B'],
+    'FRVS': ['Federación Regionalista Verde Social', '#800000'],
+    'AH':   ['Acción Humanista',                     '#f58231'],
+    'PS':   ['Partido Socialista',                   '#808000'],
+    'PPD':  ['Partido Por la Democracia',            '#bfef45'],
+    'PL':   ['Partido Liberal',                      '#fffac8'],
+    'PR':   ['Partido Radical',                      '#ffe119'],
+    'DC':   ['Democracia Cristiana',                 '#aaffc3'],
+    'EVOP': ['Evopoli',                              '#42d4f4'],
+    'RN':   ['Renovación Nacional',                  '#4363d8'],
+    'UDI':  ['Unión Demócrata Independiente',        '#000075'],
+    'PEV':  ['Partido Ecologísta Verde',             '#9A6324'],
+    'PH':   ['Partido Humanista',                    '#ffd8b1'],
+    'PLR':  ['Partido Republicano',                  '#469990'],
+    'IND':  ['Independiente',                        '#a9a9a9']
+}
+
+
+coaliciones = {
+    'AD': ['Apruebo Dignidad',     '#e6194B'],
+    'UC': ['Unidad Constituyente', '#3cb44b'],
+    'CV': ['Chile Vamos',          '#4363d8'],
+    'SC': ['Sin Coalición',        '#a9a9a9']
+}
+
+
+
 def random_color():
     colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
               '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabed4',
