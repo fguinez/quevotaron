@@ -12,8 +12,13 @@ from draw.palette import color_partido, color_coalicion, random_color
 
 
 
-title   = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf',   80)
-section = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
+title    = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf',   80)
+subtitle = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
+normal   = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
+
+R = 20
+r = 0.7 * R
+
 
 
 
@@ -27,45 +32,115 @@ def sort_group(group):
         group.append('IND')
     return group
 
-def draw_points(draw, iniX, iniY, votos, cols=20, group='coalicion'):
-    color_group = color_partido if group == 'partido' else color_coalicion
-    R = 20
-    r = 0.7 * R
-    initX = iniX + R
-    initY = iniY + R
+def draw_points(draw, iniX, iniY, votos, cols, grupos):
+    '''
+    TODO: Completar documentación.
+    [draw]
+
+    [iniX]   (int) Posición de inicio en el eje X
+
+    [iniY]   (int) Posición de inicio en el eje Y
+
+    [votos]  (dict) Estructura que contiene los votos a agregar de la forma:
+                        {<grupo1>: n, <grupo2>: n, ..., <grupoN>: n}
+
+    [cols]   (int) Cantidad de columnas deseadas
+
+    [grupos] (dict) Estructura que contiene información relacionada a los
+             grupos (en esta función solo se utilizará el color de cada uno),
+             sigue la forma:
+                        {
+                            <sigla1>: [<nombre1>, <color1>],
+                            ...,
+                            <siglaN>: [<nombreN>, <colorN>]
+                        }
+    '''
+    iniX = iniX + R
+    iniY = iniY + R
     d = 0
     for group in sort_group(votos.keys()):
-        color = color_group(group)
+        color = grupos[group][1]
         for _ in range(votos[group]):
             i = d %  cols
             j = d // cols
-            x = initX + i*R*2
-            y = initY + j*R*2
+            x = iniX + i*R*2
+            y = iniY + j*R*2
             draw.ellipse((x-r, y-r, x+r, y+r), fill=color)
             d += 1
-    endX = initX + cols*R*2 - R
-    endY = initY +    j*R*2 + R
+    endX = iniX + cols*R*2 - R
+    endY = iniY +    j*R*2 + R
     return endX, endY
 
 def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion', ):
     color_group = color_partido if group == 'partido' else color_coalicion
     R = 20
     r = 0.7 * R
-    initX = iniX + R
-    initY = iniY + R
+    iniX = iniX + R
+    iniY = iniY + R
     d = 0
     for pareo1, pareo2 in pareos:
         i = d %  cols
         j = d // cols
-        x = initX + i*R*2
-        y = initY + j*R*2
+        x = iniX + i*R*2
+        y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)
         draw.ellipse((x-r,     y-r, x+r,     y+r), fill=color_group(pareo1))
         draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=color_group(pareo2))
         d += 2
-    endX = initX + cols*R*2 - R
-    endY = initY +    j*R*2 + R
+    endX = iniX + cols*R*2 - R
+    endY = iniY +    j*R*2 + R
     return endX, endY
+
+def draw_legend(draw, lenX, iniY, grupos):
+    '''
+    [draw]
+    
+    [lenX]   (int) Ancho del cuadro de leyenda
+
+    [iniY]   (int) Posición de partida del cuadro de leyenda
+
+    [grupos] (dict) Estructura que contiene información relacionada a los
+             grupos (en esta función solo se utilizará el color de cada uno),
+             sigue la forma:
+                    {
+                        <sigla1>: [<nombre1>, <color1>],
+                        ...,
+                        <siglaN>: [<nombreN>, <colorN>]
+                    }
+    '''
+    global_iniX = (1080 - lenX) / 2
+    global_endX = 1080 - global_iniX
+    global_iniY = iniY
+    iniX = global_iniX
+    for grupo in grupos:
+        endX = iniX + 40 + draw.textsize(grupo[0], font=normal) + 20
+        if endX > global_endX:
+            iniY += 40
+        x = iniX + R
+        y = iniY + R
+        draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
+        draw.text((iniX+40,iniY), grupo[0], font=normal, fill='#333344')
+    global_endY = iniY + 40
+    # TODO: Dibujar marco con variables global_
+
+def sum_votes(conjuntos):
+    '''
+    [conjuntos] (tup) Tupla que contiene elementos con la misma estructura entregada
+                en los argumentos "opcionesH", "opcionesV" o "pareos" de la función 
+                create_image.
+
+                sum_votes retorna el total de votos sumando todos los elementos en
+                el parámetro "conjuntos".
+    '''
+    votes = 0
+    for conjunto in conjuntos:
+        if isinstance(conjunto, dict):
+            for option in conjunto:
+                votes += sum(option.values())
+        elif isinstance(conjunto, list):
+            votes += len(conjunto) * 2
+    return votes
+
 
 def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, grupos={},
                  opcionesH={}, opcionesV={}, pareos=[]):
@@ -160,52 +235,63 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     -------
     Una imagen con los datos ingresados
     '''
-    # TO-DO: El código de esta función no se ha actualizado acorde a la nueva 
-    # documentación
-    if group.lower() == 'coalicion':
-        votos_a_favor    = votacion.a_favor_coalicion
-        votos_abstencion = votacion.abstencion_coalicion
-        votos_en_contra  = votacion.en_contra_coalicion
-        votos_ausentes   = votacion.ausentes_coalicion
-        votos_pareos     = votacion.pareos_coalicion
-    elif group.lower() == 'partido':
-        votos_a_favor    = votacion.a_favor_partido
-        votos_abstencion = votacion.abstencion_partido
-        votos_en_contra  = votacion.en_contra_partido
-        votos_ausentes   = votacion.ausentes_partido
-        votos_pareos     = votacion.pareos_partido
+    # Abre imagen vacía
     im   = Image.open("img/plantilla.png")
     draw = ImageDraw.Draw(im)
-    draw.text((100,100), titulo, font=title, fill='#333333')
-    votan = 155 - (votacion.ausentes + votacion.pareos) # A favor + Abstienen + En contra
-    filas = ceil(votan / 20)
-    col_a_favor    = ceil(votacion.a_favor    / filas)
-    col_abstencion = ceil(votacion.abstencion / filas)
-    col_en_contra  = ceil(votacion.en_contra  / filas)
-    total_col = col_a_favor + col_abstencion + col_en_contra
-    #fil_ausentes = ceil(votacion.ausentes / 20)
-    #fil_pareos   = ceil(votacion.pareos / 20)
-    
-    global_iniX = (1080 - 40*total_col - 120) // 2
-    global_iniY = 300
 
-    # Dibuja a favor
+    # Escribe encabezado
+    draw.text((100,100), titulo,    font=title,    fill='#333344')
+    draw.text((150,100), subtitulo, font=subtitle, fill='#9999AA')
+    draw.text((200,500), resultado, font=subtitle, fill='#AA0033')
+    if nquorum > 0:
+        draw.text((250,500), f"Quorum {quorum}", font=subtitle, fill='#333344')
+        draw.text((300,500), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+
+    # Dibuja opciones
+    total_col = 23
+    global_iniX = (1080 - 40*total_col) // 2
+    global_iniY = 350
+        #   Horizontal
+    total_colH = total_col - len(opcionesH)
+    votosH = sum_votes((opcionesH))
+    filas = ceil(votan / total_colH)
     iniX, iniY  = (global_iniX, global_iniY)
-    endX, endY1 = draw_points(draw, iniX, iniY, votos_a_favor, col_a_favor, group)
-    # Dibuja abstencion
-    iniX, iniY  = (endX+60, iniY)
-    endX, endY2 = draw_points(draw, iniX, iniY, votos_abstencion, col_abstencion, group)
-    # Dibuja en contra
-    iniX, iniY3 = (endX+60, iniY)
-    _,    endY3 = draw_points(draw, iniX, iniY, votos_en_contra, col_en_contra, group)
-    # Dibuja ausentes
-    endY = max(endY1 ,endY2 ,endY3)
-    iniX, iniY = (global_iniX, endY+60)
-    _, endY = draw_points(draw, iniX, iniY, votos_ausentes, total_col+3, group)
-    # Dibuja pareo
-    iniX, iniY = (global_iniX, endY+60)
-    _, endY = draw_pareos(draw, iniX, iniY, votos_pareos, total_col+3, group)
+    endY_max = -1
+    posX = [] # Guarda las posiciones de inicio y término de cada opción
+    for opcion in opcionesH:
+        #TODO: Nombre de la opción escrito en vertical
+        iniX += 40
+        columnas = ceil(opcion / filas)
+        endX, endY = draw_points(draw, iniX, iniY, opcionesH[opcion], columnas, grupos)
+        posX.append((iniX-40, endX))
+        iniX = endX
+        if endY > endY_max:
+            endY_max = endY
+    #TODO: Cuadro delimitador de cada opción
+    for iniX, endX in posX:
+        # Dibujar cuadrado desde (iniX, global_iniY) hasta (endX, endY_max)
+        pass
+    #TODO END
+        #   Vertical
+    iniX, iniY = (global_iniX, endY_max)
+    for opcion in opcionesV:
+        #TODO: Nombre de la opción escrito en horizontal
+        iniY += 40
+        # Dibujar votos en vertical
+        _, endY = draw_points(draw, iniX, iniY, opcion, total_col, grupos)
+        #TODO: Cuadro delimitador de opcion
+        iniY = endY
+    if len(pareos) > 0:
+        #TODO: Nombre de la opción 'Pareo' escrito en horizontal
+        _, endY = draw_pareos(draw, iniX, iniY, pareos)
+        #TODO: Cuadro delimitador de opción 'Pareo'
+        iniY = endY
+    
+    # Dibuja leyenda
+    draw_legend(lenX, iniY+80, grupos)
 
+    # Dibuja banner inferior
+    # TODO: Dibujar banner inferior
 
     #im.show()
     return im
