@@ -1,6 +1,7 @@
 from   collections import namedtuple
 import time
 import os
+import sys
 
 from   models import Diputado
 import api
@@ -14,7 +15,7 @@ Militancia = namedtuple('Militancia', ['partido','coalicion','nombre'])
 
 
 def get_coaliciones():
-    path = "diputados/data/coaliciones.csv"
+    path = "data/coaliciones.csv"
     with open(path, 'r') as file:
         lines = file.readlines()
         lines = (line.strip().split(',') for line in lines)
@@ -36,7 +37,7 @@ def get_militancia(militancias):
     return ultima_militancia
 
 def get_militancias():
-    path = "diputados/data/militancias.csv"
+    path = "data/militancias.csv"
     if os.path.isfile(path):
         with open(path, 'r') as file:
             file.readline()                                          # Ignorar encabezado
@@ -62,6 +63,36 @@ def get_militancias():
             militancias[id] = Militancia(militancia, coaliciones[militancia], nombre)
     return militancias
 
+def nombre2abreviacion(nombre):
+    path = "data/abreviaciones.csv"
+    with open(path, 'r') as file:
+        lines = file.readlines()
+        lines = (line.strip().split(',') for line in lines)
+        abreviaciones = {line[0].lower(): line[1] for line in lines}
+    return abreviaciones[nombre.lower()]
+
+def _get_partido(diputado):
+    regla = lambda p: "partido:" in p.text.lower()
+    info = list(filter(regla, diputado.find_all("p")))[0]
+    regla = lambda text: "partido" in text.lower()
+    partido = list(filter(regla, info.text.split("\n")))[0]
+    partido = partido.strip().split(": ")[-1]
+    partido = partido.split(" ")
+    if partido[0].lower() == "partido":
+        partido = partido[1:]
+    partido = " ".join(partido)
+    partido = nombre2abreviacion(partido)
+    return partido
+
+def get_diputado(dipip):
+    diputado = api.get_diputado(dipip)
+    h2 = diputado.find("h2").text                 # Se encuentra el título
+    nombre = " ".join(h2.split(" ")[1:])          # Se elimina 'Diputadx' del título, dejando solo el nombre
+    partido = _get_partido(diputado)
+    #coalicion = 
+    return Diputado(dipip, nombre, partido, coalicion)
+
+
 def create_diputado(diputado, militancia):
     '''
     <class 'bs4.element.Tag'> diputado
@@ -80,3 +111,19 @@ def get_diputados():
         id = int(diputado.DIPID.string)
         diputados[id] = create_diputado(diputado, militancias[id])
     return diputados
+
+
+
+
+if __name__ == "__main__":
+    # Se ajusta el directorio a la carpeta diputados
+    path = sys.argv[0].split('/')
+    if len(path) > 1:
+        path = f"{os.getcwd()}/{path[0]}"
+        os.chdir(path)
+
+    # Zona de pruebas
+    #print(get_diputado(945))
+        
+    print(os.getcwd())
+    print(nombre2abreviacion("Revolución Remocrática"))

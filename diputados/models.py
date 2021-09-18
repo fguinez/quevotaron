@@ -4,7 +4,7 @@ import time
 
 
 class Diputado:
-    def __init__(self, id, nombre, partido, coalicion):
+    def __init__(self, id, nombre, partido, coalicion, distrito=None):
         self.id        = id
         self.nombre    = nombre
         self.partido   = partido
@@ -13,6 +13,8 @@ class Diputado:
         self.voto = None
         self.pareo = False
         self.pareo_id = -1
+
+        self.distrito = distrito
 
     def votar(self, opcion, pareo_id=-1):
         self.ausente = False

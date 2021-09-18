@@ -29,19 +29,25 @@ def _get_data(path, url, force_request=False, parser='html.parser'):
     data = BeautifulSoup(html, parser)
     return data
 
+# Obtiene la información de un diputado
+# URL utilizada: https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={}
+def get_diputado(dipid, force_request=False):
+    path = f'diputados/data/diputados/{dipid}.html'
+    url = f'https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={dipid}'
+    data = _get_data(path, url, force_request=force_request)
+    return data
+
 def get_diputados_periodo(force_request=False):
     path = 'diputados/data/diputados_periodo.xml'
     url = url_base + 'WSDiputado.asmx/retornarDiputadosPeriodoActual'
     data = _get_data(path, url, force_request=force_request, parser='xml')
     return data
 
-    
 def get_diputados_vigentes(force_request=False):
     path = 'diputados/data/diputados_vigentes.xml'
     url = 'http://opendata.camara.cl/wscamaradiputados.asmx/getDiputados_Vigentes'
     data = _get_data(path, url, force_request=force_request, parser='xml')
     return data
-
 
 def get_diputados():
     path = 'diputados/data/diputados.xml'
