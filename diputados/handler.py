@@ -1,9 +1,9 @@
-from collections import namedtuple
+from   collections import namedtuple
 import time
 import os
 
-from diputados.models import Diputado
-import diputados.api as api
+from   models import Diputado
+import api
 
 
 
