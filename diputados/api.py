@@ -1,9 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
+import sys
 import os
 
 
 
+
+# Situa todos los path en la carpeta diputados
+path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
 
 url_base  = 'http://opendata.camara.cl/camaradiputados/WServices/'
 url_base2 = 'http://opendata.camara.cl/wscamaradiputados.asmx/'
@@ -32,31 +36,39 @@ def _get_data(path, url, force_request=False, parser='html.parser'):
 # Obtiene la información de un diputado
 # URL utilizada: https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={}
 def get_diputado(dipid, force_request=False):
-    path = f'diputados/data/diputados/{dipid}.html'
+    path = f'{path_base}/data/diputados/{dipid}.html'
     url = f'https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={dipid}'
     data = _get_data(path, url, force_request=force_request)
     return data
 
+# Obtiene la información de los diputados del periodo actual (no necesariamente vigentes),
+# se incluyen quienes fueron electos pero ya no están ejerciendo y quienes asumieron en su
+# reemplazo.
+# URL utilizada: http://opendata.camara.cl/camaradiputados/WServices/WSDiputado.asmx/retornarDiputadosPeriodoActual
 def get_diputados_periodo(force_request=False):
-    path = 'diputados/data/diputados_periodo.xml'
+    path = f'{path_base}/data/diputados_periodo.xml'
     url = url_base + 'WSDiputado.asmx/retornarDiputadosPeriodoActual'
     data = _get_data(path, url, force_request=force_request, parser='xml')
     return data
 
+# Obtiene la información de los diputados actualmente en ejercicio
+# URL utilizada: http://opendata.camara.cl/wscamaradiputados.asmx/getDiputados_Vigentes
 def get_diputados_vigentes(force_request=False):
-    path = 'diputados/data/diputados_vigentes.xml'
+    path = f'{path_base}/data/diputados_vigentes.xml'
     url = 'http://opendata.camara.cl/wscamaradiputados.asmx/getDiputados_Vigentes'
     data = _get_data(path, url, force_request=force_request, parser='xml')
     return data
 
+# Obtiene la información histórica de todos los diputados que alguna vez ejercieron
+# URL utilizada: http://opendata.camara.cl/camaradiputados/WServices/WSDiputado.asmx/retornarDiputados
 def get_diputados():
-    path = 'diputados/data/diputados.xml'
+    path = f'{path_base}/data/diputados.xml'
     url = url_base + 'WSDiputado.asmx/retornarDiputados'
     data = _get_data(path, url)
     return data
 
 def get_proyecto(prmNumeroBoletin):
-    path = f'diputados/data/proyectos/{prmNumeroBoletin}.xml'
+    path = f'{path_base}/data/proyectos/{prmNumeroBoletin}.xml'
     url = url_base + f'WSLegislativo.asmx/retornarVotacionesXProyectoLey?prmNumeroBoletin={prmNumeroBoletin}'
     data = _get_data(path, url)
     return data
@@ -64,7 +76,7 @@ def get_proyecto(prmNumeroBoletin):
 # Obtiene los resultados de una votación
 # URL utilizada: https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={}
 def get_votacion(prmVotacionID):
-    path = f'diputados/data/votaciones/{prmVotacionID}.html'
+    path = f'{path_base}/data/votaciones/{prmVotacionID}.html'
     url = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={prmVotacionID}'
     data = _get_data(path, url)
     return data
@@ -73,4 +85,4 @@ def get_votacion(prmVotacionID):
 
 
 if __name__ == "__main__":
-    get_votacion(36931)
+    get_diputados_vigentes(force_request=True)

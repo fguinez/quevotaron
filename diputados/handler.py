@@ -9,13 +9,16 @@ import api
 
 
 
+# Situa todos los path en la carpeta diputados
+path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+
 Militancia = namedtuple('Militancia', ['partido','coalicion','nombre']) 
 
 
 
 
 def get_coaliciones():
-    path = "data/coaliciones.csv"
+    path = f"{path_base}/data/coaliciones.csv"
     with open(path, 'r') as file:
         lines = file.readlines()
         lines = (line.strip().split(',') for line in lines)
@@ -36,9 +39,9 @@ def get_militancia(militancias):
                 ultima_militancia = "IND"
     return ultima_militancia
 
-def get_militancias():
-    path = "data/militancias.csv"
-    if os.path.isfile(path):
+def get_militancias(filename="militancias.csv"):
+    path = f"{path_base}/data/{filename}"
+    if os.path.isfile(path):                            # En caso de que el archivo ya exista, se lee
         with open(path, 'r') as file:
             file.readline()                                          # Ignorar encabezado
             lines = file.readlines()
@@ -46,31 +49,37 @@ def get_militancias():
             # {id: [partido, coalición, nombre]}
             militancias = {int(line[0]): Militancia(line[1], line[2], line[3]) for line in lines}
         return militancias
-    diputados_periodo = api.get_diputados_periodo()
-    diputados_vigentes = api.get_diputados_vigentes()
+    # En caso de que el archivo no exista, se escribe
     militancias = {}
-    coaliciones = get_coaliciones()
+    diputados_vigentes = api.get_diputados_vigentes()
+    ids_vigentes = [int(d.DIPID.string) for d in diputados_vigentes.findAll('Diputado')]
     with open(path, 'w') as file:
         file.write("id,partido,coalicion,nombre\n")
-        for diputado in diputados_periodo.findAll('Diputado'):
-            ids_vigentes = [int(d.DIPID.string) for d in diputados_vigentes.findAll('Diputado')]
-            id = int(diputado.Id.string)
-            if not id in ids_vigentes:
-                continue
-            nombre = f"{diputado.Nombre.string} {diputado.ApellidoPaterno.string} {diputado.ApellidoMaterno.string}"
-            militancia = get_militancia(diputado.Militancias)
-            file.write(f"{id},{militancia},{coaliciones[militancia]},{nombre}\n")
-            militancias[id] = Militancia(militancia, coaliciones[militancia], nombre)
+        for dipid in ids_vigentes:
+            diputado = get_diputado(dipid)
+            file.write(f"{dipid},{diputado.partido},{diputado.coalicion},{diputado.nombre}\n")
+            militancias[dipid] = Militancia(diputado.partido, diputado.coalicion, diputado.nombre)
     return militancias
 
-def nombre2abreviacion(nombre):
-    path = "data/abreviaciones.csv"
+# Recibe el nombre de un partido y retorna su abreviación
+def partido2abreviacion(nombre):
+    path = f"{path_base}/data/partidos.csv"
     with open(path, 'r') as file:
         lines = file.readlines()
         lines = (line.strip().split(',') for line in lines)
         abreviaciones = {line[0].lower(): line[1] for line in lines}
     return abreviaciones[nombre.lower()]
 
+# Recibe el nombre de una bancada y retorna la abreviación de la coalición respectiva
+def coalicion2abreviacion(nombre):
+    path = f"{path_base}/data/bancadas.csv"
+    with open(path, 'r') as file:
+        lines = file.readlines()
+        lines = (line.strip().split(',') for line in lines)
+        abreviaciones = {line[0].lower(): line[1] for line in lines}
+    return abreviaciones[nombre.lower()]
+
+# Obtiene la abreviación del partido correspondiente al diputado ingresado
 def _get_partido(diputado):
     regla = lambda p: "partido:" in p.text.lower()
     info = list(filter(regla, diputado.find_all("p")))[0]
@@ -81,17 +90,28 @@ def _get_partido(diputado):
     if partido[0].lower() == "partido":
         partido = partido[1:]
     partido = " ".join(partido)
-    partido = nombre2abreviacion(partido)
+    partido = partido2abreviacion(partido)
     return partido
 
-def get_diputado(dipip):
-    diputado = api.get_diputado(dipip)
+# Obtiene la abreviación de la coalición correspondiente al diputado ingresado
+def _get_coalicion(diputado):
+    regla = lambda p: "bancada:" in p.text.lower()
+    info = list(filter(regla, diputado.find_all("p")))[0]
+    regla = lambda text: "bancada" in text.lower()
+    coalicion = list(filter(regla, info.text.split("\n")))[0]
+    coalicion = coalicion.strip().split(": ")[-1]
+    coalicion = coalicion.replace(',', '')
+    coalicion = coalicion2abreviacion(coalicion)
+    return coalicion
+
+# Obtiene la información de un diputado en particular (en ocasiones, logra más detalle que get_diputados)
+def get_diputado(dipid):
+    diputado = api.get_diputado(dipid)
     h2 = diputado.find("h2").text                 # Se encuentra el título
     nombre = " ".join(h2.split(" ")[1:])          # Se elimina 'Diputadx' del título, dejando solo el nombre
     partido = _get_partido(diputado)
-    #coalicion = 
-    return Diputado(dipip, nombre, partido, coalicion)
-
+    coalicion = _get_coalicion(diputado)
+    return Diputado(dipid, nombre, partido, coalicion)
 
 def create_diputado(diputado, militancia):
     '''
@@ -116,14 +136,7 @@ def get_diputados():
 
 
 if __name__ == "__main__":
-    # Se ajusta el directorio a la carpeta diputados
-    path = sys.argv[0].split('/')
-    if len(path) > 1:
-        path = f"{os.getcwd()}/{path[0]}"
-        os.chdir(path)
-
     # Zona de pruebas
     #print(get_diputado(945))
         
-    print(os.getcwd())
-    print(nombre2abreviacion("Revolución Remocrática"))
+    get_militancias("militest.csv")
