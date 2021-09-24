@@ -94,7 +94,7 @@ def _get_partido(diputado):
     return partido
 
 # Obtiene la abreviación de la coalición correspondiente al diputado ingresado
-def _get_coalicion(diputado):
+def _get_coalicion(diputado, partido=""):
     regla = lambda p: "bancada:" in p.text.lower()
     info = list(filter(regla, diputado.find_all("p")))[0]
     regla = lambda text: "bancada" in text.lower()
@@ -102,6 +102,9 @@ def _get_coalicion(diputado):
     coalicion = coalicion.strip().split(": ")[-1]
     coalicion = coalicion.replace(',', '')
     coalicion = coalicion2abreviacion(coalicion)
+    # Excepciones
+    if partido == "FRVS":
+        coalicion = "AD"
     return coalicion
 
 # Obtiene la información de un diputado en particular (en ocasiones, logra más detalle que get_diputados)
@@ -110,7 +113,7 @@ def get_diputado(dipid):
     h2 = diputado.find("h2").text                 # Se encuentra el título
     nombre = " ".join(h2.split(" ")[1:])          # Se elimina 'Diputadx' del título, dejando solo el nombre
     partido = _get_partido(diputado)
-    coalicion = _get_coalicion(diputado)
+    coalicion = _get_coalicion(diputado, partido)
     return Diputado(dipid, nombre, partido, coalicion)
 
 def create_diputado(diputado, militancia):
@@ -139,4 +142,4 @@ if __name__ == "__main__":
     # Zona de pruebas
     #print(get_diputado(945))
         
-    get_militancias("militest.csv")
+    get_militancias("militancias.csv")
