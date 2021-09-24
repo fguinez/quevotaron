@@ -19,7 +19,7 @@ class Diputado:
     def votar(self, opcion, pareo_id=-1):
         self.ausente = False
         # A favor (Apruebo / Afirmativo)
-        if opcion.capitalize()[:2] in ["Ap", "Af"]:
+        if opcion.capitalize()[:2] in ["Ap", "Af", "A "]:
             self.voto = "A favor"
         # Abstienen
         elif opcion.capitalize()[:2] == "Ab":
@@ -114,7 +114,14 @@ class Votacion:
         return my_dict
 
     @property
-    def info_partido(self):
+    # Entrega la información de la votación de forma que facilita la
+    # construcción de visualizaciones
+    def info(self):
+        return self.info_por_partido, self.info_por_coalicion
+
+    @property
+    # Entrega la información de la votación segmentada por partido
+    def info_por_partido(self):
         opcionesH = {
             "A favor": self.a_favor_partido,
             "Abstienen": self.abstencion_partido,
@@ -126,7 +133,8 @@ class Votacion:
         return opcionesH, opcionesV, self.pareos_partido
 
     @property
-    def info_coalicion(self):
+    # Entrega la información de la votación segmentada por coalición
+    def info_por_coalicion(self):
         opcionesH = {
             "A favor": self.a_favor_coalicion,
             "Abstienen": self.abstencion_coalicion,

@@ -3,18 +3,22 @@ Propósito del módulo: Abstraer la generación de gráficas a diferentes contex
 '''
 
 # https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
+from palette import color_partido, color_coalicion, random_color
 from PIL import Image, ImageDraw, ImageFont
 from math import ceil
 import sys
-
-from draw.palette import color_partido, color_coalicion, random_color
-
+import os
 
 
 
-title    = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf',   80)
-subtitle = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
-normal   = ImageFont.truetype('fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
+
+# Situa todos los path en la carpeta draw
+path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+
+# Se definen las tipografías a utilizar
+title    = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf',   80)
+subtitle = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
+normal   = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
 
 R = 20
 r = 0.7 * R
@@ -71,21 +75,43 @@ def draw_points(draw, iniX, iniY, votos, cols, grupos):
     endY = iniY +    j*R*2 + R
     return endX, endY
 
-def draw_pareos(draw, iniX, iniY, pareos, cols=20, group='coalicion', ):
-    color_group = color_partido if group == 'partido' else color_coalicion
+def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
+    '''
+    TODO: Completar documentación.
+    [draw]
+
+    [iniX]   (int) Posición de inicio en el eje X
+
+    [iniY]   (int) Posición de inicio en el eje Y
+
+    [pareos] (dict) Estructura que contiene los grupos de los pareos a agregar
+             de la forma:
+                        [(<grupo1>, <grupo2>), (<grupo3>, <grupo4>), ...]
+
+    [cols]   (int) Cantidad de columnas deseadas
+
+    [grupos] (dict) Estructura que contiene información relacionada a los
+             grupos (en esta función solo se utilizará el color de cada uno),
+             sigue la forma:
+                        {
+                            <sigla1>: [<nombre1>, <color1>],
+                            ...,
+                            <siglaN>: [<nombreN>, <colorN>]
+                        }
+    '''
     R = 20
     r = 0.7 * R
     iniX = iniX + R
     iniY = iniY + R
     d = 0
-    for pareo1, pareo2 in pareos:
+    for grupo1, grupo2 in pareos:
         i = d %  cols
         j = d // cols
         x = iniX + i*R*2
         y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)
-        draw.ellipse((x-r,     y-r, x+r,     y+r), fill=color_group(pareo1))
-        draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=color_group(pareo2))
+        draw.ellipse((x-r,     y-r, x+r,     y+r), fill=grupos[grupo1][1])
+        draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=grupos[grupo2][1])
         d += 2
     endX = iniX + cols*R*2 - R
     endY = iniY +    j*R*2 + R
@@ -285,7 +311,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         iniY = endY
     if len(pareos) > 0:
         #TODO: Nombre de la opción 'Pareo' escrito en horizontal
-        _, endY = draw_pareos(draw, iniX, iniY, pareos)
+        _, endY = draw_pareos(draw, iniX, iniY, pareos, total_col, grupos)
         #TODO: Cuadro delimitador de opción 'Pareo'
         iniY = endY
     

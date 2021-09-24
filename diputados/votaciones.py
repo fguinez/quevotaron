@@ -79,4 +79,5 @@ def get_votacion(id):
 
 
 if __name__ == "__main__":
-    print(get_votacion(36931))
+    v = get_votacion(36931)
+    print(v.info_por_coalicion)
