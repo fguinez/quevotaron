@@ -1,4 +1,5 @@
 import time
+import math
 
 
 
@@ -39,8 +40,7 @@ class Votacion:
         self.fecha      = time.strptime(fecha, '%d %m %Y')
         self.tipo       = tipo
         self.resultado  = resultado
-        self.quorum     = quorum
-        print(quorum)
+        self.quorum     = self.get_quorum(quorum)
         self.diputados  = diputados
         self.a_favor    = a_favor
         self.abstencion = abstencion
@@ -59,7 +59,7 @@ class Votacion:
         self.pareos_coalicion = []
 
         self.generar_detalle(votos)
-        
+
     def generar_votos(self, votos, opcion):
         '''
         (str) opcion: A favor, En contra, Abstención
@@ -114,10 +114,37 @@ class Votacion:
             my_dict[elem] = 1
         return my_dict
 
+    @staticmethod
+    # Arregla el nombre del quorum obtenido del html, cambiandolo por uno más
+    # autoexplicable.
+    def get_quorum(quorum):
+        if quorum.lower() == "quorum simple":               # Mayoria presente
+            return "Simple"
+        if quorum.lower() == "quorum calificado":           # Mayoria total
+            return "Calificado"
+        if quorum.lower() == "ley organica constitucional": # 4/7 total
+            return "4/7 del total"
+        if quorum.lower() in ["reforma constitucional 3/5", "3/5"]:  # 3/5 total
+            return "3/5 del total"
+        if quorum.lower() in ["reforma constitucional 2/3", "2/3"]:  # 2/3 total
+            return "2/3 del total"
+        return ""
+
     @property
     # Entrega la cantidad de votos necesaria para aprobar
     def nquorum(self):
-        return 5
+        if self.quorum == "Simple":
+            total_presentes = self.a_favor + self.abstencion + self.en_contra
+            return math.floor((total_presentes / 2) + 1)
+        if self.quorum == "Calificado":
+            return 78
+        if self.quorum == "4/7 del total":
+            return 89
+        if self.quorum == "3/5 del total":
+            return 93
+        if self.quorum == "2/3 del total":
+            return 104
+        return -1
 
     @property
     # Entrega la información de la votación en formato json

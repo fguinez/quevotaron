@@ -275,7 +275,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     draw.text((100,200), subtitulo, font=subtitle, fill='#9999AA')
     draw.text((700,250), resultado, font=subtitle, fill='#AA0033')
     if nquorum > 0:
-        draw.text((120,250), f"{quorum}", font=subtitle, fill='#333344')
+        draw.text((120,250), f"Quorum: {quorum}", font=subtitle, fill='#333344')
         draw.text((120,300), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
