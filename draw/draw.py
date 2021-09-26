@@ -266,12 +266,17 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     draw = ImageDraw.Draw(im)
 
     # Escribe encabezado
+    # TODO: Arreglar el ingreso de los títulos como argumento
+    #titulo = input("Ingresa un título: ")
+    titulo = "Título"
     draw.text((100,100), titulo,    font=title,    fill='#333344')
-    draw.text((150,100), subtitulo, font=subtitle, fill='#9999AA')
-    draw.text((200,500), resultado, font=subtitle, fill='#AA0033')
+    #titulo = input("Ingresa un subtítulo: ")
+    subtitulo = "Subtitulo subtitulo"
+    draw.text((100,200), subtitulo, font=subtitle, fill='#9999AA')
+    draw.text((700,250), resultado, font=subtitle, fill='#AA0033')
     if nquorum > 0:
-        draw.text((250,500), f"Quorum {quorum}", font=subtitle, fill='#333344')
-        draw.text((300,500), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+        draw.text((120,250), f"{quorum}", font=subtitle, fill='#333344')
+        draw.text((120,300), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
     total_col = 23

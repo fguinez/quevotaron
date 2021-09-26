@@ -23,7 +23,12 @@ if __name__ == "__main__":
 
     # Cargamos el objeto Votación
     with open(path_votacion, 'rb') as file:
-        votacion_por_partido, votacion_por_coalicion = pickle.load(file)
+        votacion_info = pickle.load(file)
+    resultado              = votacion_info["resultado"]
+    quorum                 = votacion_info["quorum"]
+    nquorum                = votacion_info["nquorum"]
+    votacion_por_partido   = votacion_info["info_por_partido"]
+    votacion_por_coalicion = votacion_info["info_por_coalicion"]
 
     titulo = ""
     # Si fue ingresado como argumento, rescatamos el título de la visualización
@@ -32,12 +37,14 @@ if __name__ == "__main__":
 
     # Creamos la visualización por partidos
     opcionesH, opcionesV, pareos = votacion_por_partido
-    im = create_image(titulo, grupos=partidos,
+    im = create_image(titulo, resultado=resultado, quorum=quorum,
+                      nquorum=nquorum, grupos=partidos,
                       opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
     im.save(f'{path_root}/visualizaciones/{votid}_partidos.png')
 
     # Creamos la visualización por coalicion
     opcionesH, opcionesV, pareos = votacion_por_coalicion
-    im = create_image(titulo, grupos=coaliciones,
+    im = create_image(titulo, resultado=resultado, quorum=quorum,
+                      nquorum=nquorum, grupos=coaliciones,
                       opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
     im.save(f'{path_root}/visualizaciones/{votid}_coaliciones.png')

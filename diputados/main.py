@@ -28,7 +28,7 @@ if __name__ == "__main__":
         votacion = get_votacion(votid)
         # Guardamos el objeto de la votación
         with open(path, 'wb') as file:
-            pickle.dump(votacion.info, file)
+            pickle.dump(votacion.json, file)
 
     titulo = ""
     # Si fue ingresado como argumento, rescatamos el título de la visualización

@@ -40,6 +40,7 @@ class Votacion:
         self.tipo       = tipo
         self.resultado  = resultado
         self.quorum     = quorum
+        print(quorum)
         self.diputados  = diputados
         self.a_favor    = a_favor
         self.abstencion = abstencion
@@ -114,10 +115,23 @@ class Votacion:
         return my_dict
 
     @property
-    # Entrega la información de la votación de forma que facilita la
-    # construcción de visualizaciones
-    def info(self):
-        return self.info_por_partido, self.info_por_coalicion
+    # Entrega la cantidad de votos necesaria para aprobar
+    def nquorum(self):
+        return 5
+
+    @property
+    # Entrega la información de la votación en formato json
+    def json(self):
+        return {
+            "id": self.id,
+            "fecha": self.fecha,
+            "tipo": self.tipo,
+            "resultado": self.resultado,
+            "quorum": self.quorum,
+            "nquorum": self.nquorum,
+            "info_por_partido": self.info_por_partido,
+            "info_por_coalicion": self.info_por_coalicion
+        }
 
     @property
     # Entrega la información de la votación segmentada por partido
