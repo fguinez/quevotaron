@@ -29,6 +29,8 @@ if __name__ == "__main__":
     nquorum                = votacion_info["nquorum"]
     votacion_por_partido   = votacion_info["info_por_partido"]
     votacion_por_coalicion = votacion_info["info_por_coalicion"]
+    print(votacion_por_partido)
+    print(votacion_por_coalicion)
 
     titulo = ""
     # Si fue ingresado como argumento, rescatamos el título de la visualización

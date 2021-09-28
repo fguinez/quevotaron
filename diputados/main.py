@@ -17,9 +17,10 @@ path_root = '/'.join(path_diputados.split('/')[:-1])
 if __name__ == "__main__":
 
     votids = [36977, 36976, 36975, 36974, 36973]
+    if len(sys.argv) > 1:
+            votids = [int(sys.argv[1])]
+    
     for votid in votids:
-        if len(sys.argv) > 1:
-            votid = int(sys.argv[1])
 
         # Define el path a la información necesaria para crear la visualización
         filename = f"{votid}.pkl"
