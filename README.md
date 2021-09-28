@@ -24,6 +24,8 @@ pip install -r requirements.txt
 
 Este repositorio utiliza el idioma español tanto en su documentación como en el uso de `git flow`. Esto se fundamenta en el contexto chileno del proyecto QueVotaron, se busca facilitar y fomentar el uso nacional de la herramienta, por sobre un acceso universal tradicional. No está de más recordar que, en un proyecto de código abierto descontextualizado, sigue siendo una mejor práctica utilizar el idioma Inglés para la documentación.
 
+En el caso de nombramiento de entidades se debe priorizar el uso de español, pero se permite la combinación de español con inglés ([_spanglish_](https://es.wikipedia.org/wiki/Espanglish)) cuando resulte más cómodo. Por ejemplo, es correcto llamar a una función `obtener_diputados`, pero también se permite `get_diputados` para simplificar las cosas.
+
 Adicionalmente, se define el uso de commits atómicos con descripciones breves. Se recomienda comenzar los commits con un _emoji_ relacionado a su temática, seguido de una acción en presente.
 
 Algunos ejemlos de commits válidos pueden ser:
