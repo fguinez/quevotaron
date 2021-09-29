@@ -28,7 +28,7 @@ def get_coaliciones():
 def get_militancia(militancias):
     most_recent = time.gmtime(0)
     ultima_militancia = "IND"
-    for militancia in militancias.findAll('Militancia'):
+    for militancia in militancias.find_all('Militancia'):
         fecha_inicio = militancia.FechaInicio.string
         fecha_inicio = time.strptime(fecha_inicio, '%Y-%m-%dT%H:%M:%S')
         if fecha_inicio > most_recent:
@@ -52,7 +52,7 @@ def get_militancias(filename="militancias.csv"):
     # En caso de que el archivo no exista, se escribe
     militancias = {}
     diputados_vigentes = api.get_diputados_vigentes()
-    ids_vigentes = [int(d.DIPID.string) for d in diputados_vigentes.findAll('Diputado')]
+    ids_vigentes = [int(d.DIPID.string) for d in diputados_vigentes.find_all('Diputado')]
     with open(path, 'w') as file:
         file.write("id,partido,coalicion,nombre\n")
         for dipid in ids_vigentes:
@@ -130,7 +130,7 @@ def get_diputados():
     diputados_vigentes = api.get_diputados_vigentes()
     militancias = get_militancias()
     diputados = {}
-    for diputado in diputados_vigentes.findAll('Diputado'):
+    for diputado in diputados_vigentes.find_all('Diputado'):
         id = int(diputado.DIPID.string)
         diputados[id] = create_diputado(diputado, militancias[id])
     return diputados
