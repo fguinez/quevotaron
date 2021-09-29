@@ -1,4 +1,7 @@
 # QueVotaron
+
+- _**Nota:** Trabajo en proceso 🚧🚧🚧_
+
 Proyecto destinado a visibilizar las votaciones de proyectos de ley del Congreso chileno.
 
 ## Por hacer
