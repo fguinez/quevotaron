@@ -1,3 +1,6 @@
+# TODO: Fusionar los módulos api, handler y votaciones. Sus funciones realmente responden
+# a las mismas funcionalidades y generan un message chain.
+
 from bs4 import BeautifulSoup
 import requests
 import sys
@@ -22,16 +25,27 @@ def get_html(url):
     return html_str
 
 # Obtiene el html disponible en URL
-def _get_data(path, url, force_request=False, parser='html.parser'):
-    if os.path.isfile(path) and not force_request:          # Si los datos están guardados en local
+def _get_data(path, url, force_request=False, save_html=True, parser='html.parser'):
+    if os.path.isfile(path) and not force_request and save_html:  # Si los datos están guardados en local
         with open(path, 'r') as file:
             html = file.read()
-    else:                                                   # Si los datos no están guardados en local
+    else:                                                         # Si los datos no están guardados en local
         html = get_html(url)
-        with open(path, 'w') as file:
-            file.write(html)
+        if save_html:
+            with open(path, 'w') as file:
+                file.write(html)
     data = BeautifulSoup(html, parser)
     return data
+
+# Obtiene un listado con los ids, de las últimas 20 votaciones realizadas
+# URL utilizada: https://www.camara.cl/legislacion/sala_sesiones/votaciones.aspx
+def get_votaciones_recientes():
+    url = 'https://www.camara.cl/legislacion/sala_sesiones/votaciones.aspx'
+    data = _get_data("", url, save_html=False)
+    data = data.find_all("div", {"class": "datos_votacion"})
+    hrefs = [d.find_next("a")["href"] for d in data]
+    votids = [int(href.split('=')[-1]) for href in hrefs]
+    return votids
 
 # Obtiene la información de un diputado
 # URL utilizada: https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={}
@@ -85,4 +99,6 @@ def get_votacion(prmVotacionID):
 
 
 if __name__ == "__main__":
-    get_diputados_vigentes(force_request=True)
+    votids = get_votaciones_recientes()
+    print(len(votids))
+    print(votids)

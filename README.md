@@ -3,12 +3,19 @@ Proyecto destinado a visibilizar las votaciones de proyectos de ley del Congreso
 
 ## Por hacer
 
+- Fusionar los módulos `api`, `handler` y `votaciones`. Actualmente `api` se encarga solo de realizar los requests y parsear a bs4 los HTML, mientras que `handler` y `votaciones` llaman a
+los métodos de `api` para terminar de procesar la información. Esto podría considerarse un _code smell_ ([message chains](https://refactoring.guru/smells/message-chains)).
+  - Hay dos posibles soluciones:
+    1. Fusionar todo en un único archivo `api.py`
+    2. Crear una carpeta `api` que contenga `diputados.py` y `votaciones.py`
 - Implementar versión alternativa de `get_votaciones` para votaciones históricas (con diputados no vigentes)
   - Para ello es necesario utilizar la lista histórica de diputados, no la lista de diputados vigentes
   - Esto podría implicar desconocer quienes se ausentaron de la sala en ese momento
     - Posible solución: Filtrar los diputados vigentes al momento de votar por la fecha de votación
 
 - Diseñar plantilla de imagen
+
+- Solucionar bugs en distribución de puntos en imagen
 
 - Automatizar mapeo de resultados a imagen
 
