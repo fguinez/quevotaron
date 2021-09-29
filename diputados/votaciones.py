@@ -72,7 +72,7 @@ def get_votacion(id):
     a_favor    = get_a_favor(votacion_info)
     abstencion = get_abstencion(votacion_info)
     en_contra  = get_en_contra(votacion_info)
-    votos      = votacion_info.findAll('h3')
+    votos      = votacion_info.find_all('h3')
     return Votacion(id, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
 
 
