@@ -294,7 +294,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         iniX += 40
         if filas == 0:
             continue
-        columnas = ceil(votosH / filas)
+        columnas = ceil(sum(opcionesH[opcion].values()) / filas)
         endX, endY = draw_points(draw, iniX, iniY, opcionesH[opcion], columnas, grupos)
         posX.append((iniX-40, endX))
         iniX = endX
