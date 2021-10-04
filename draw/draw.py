@@ -6,7 +6,7 @@ Propósito del módulo: Abstraer la generación de gráficas a diferentes contex
 from palette import color_partido, color_coalicion, random_color
 from PIL import Image, ImageFont
 from image_utils import ImageDraw
-from math import ceil
+from math import floor, ceil
 import textwrap
 import sys
 import os
@@ -306,7 +306,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         #   Horizontal
     total_colH = total_col - len(opcionesH)
     votosH = sum_votes((opcionesH,))
-    filas = ceil(votosH / total_colH)
+    filas = floor(votosH / total_colH) + 1
     iniX, iniY  = (global_iniX, global_iniY)
     endY_max = -1
     posX = [] # Guarda las posiciones de inicio y término de cada opción
