@@ -284,6 +284,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     '''
     # Abre imagen vacía
     im   = Image.open("draw/img/plantilla.png")
+    background_color = im.getpixel((1,1079))
     draw = ImageDraw(im)
 
     # Escribe encabezado
@@ -296,7 +297,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     draw.text((700,title_size[1]+20), resultado, font=subtitle, fill=color_resultado)
     if nquorum > 0:
         draw.text((120,title_size[1]+20), f"Quorum: {quorum}", font=subtitle, fill='#333344')
-        draw.text((120,title_size[1]+80), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+        draw.text((130,title_size[1]+70), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
     total_col = 23
@@ -310,11 +311,19 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     endY_max = -1
     posX = [] # Guarda las posiciones de inicio y término de cada opción
     for opcion in opcionesH:
-        #TODO: Nombre de la opción escrito en vertical
+        # Nombre de la opción escrito en vertical
+        total_opcion = sum(opcionesH[opcion].values())
+        labelsize = normal.getsize(f"{opcion}: {total_opcion}")
+        label = Image.new('RGBA', labelsize, background_color)
+        draw_label = ImageDraw(label)
+        draw_label.text((0, 0), f"{opcion}: {total_opcion}", font=normal, fill='#333344')
+        label = label.rotate(90, expand=1)
+        im.paste(label, (iniX+10, iniY+20))
+        # Despliegue de votos
         iniX += 40
         if filas == 0:
             continue
-        columnas = ceil(sum(opcionesH[opcion].values()) / filas)
+        columnas = ceil(total_opcion / filas)
         if columnas == 0:
             continue
         endX, endY = draw_points(draw, iniX, iniY, opcionesH[opcion], columnas, grupos)
@@ -330,14 +339,18 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         #   Vertical
     iniX, iniY = (global_iniX, endY_max)
     for opcion in opcionesV:
-        #TODO: Nombre de la opción escrito en horizontal
+        # Nombre de la opción escrito en horizontal
+        total_opcion = sum(opcionesV[opcion].values())
+        draw.text((iniX+20, iniY+12), f"{opcion}: {total_opcion}", font=normal, fill='#333344')
         iniY += 40
         # Dibujar votos en vertical
         _, endY = draw_points(draw, iniX, iniY, opcionesV[opcion], total_col, grupos)
         #TODO: Cuadro delimitador de opcion
         iniY = endY
     if len(pareos) > 0:
-        #TODO: Nombre de la opción 'Pareo' escrito en horizontal
+        # Nombre de la opción 'Pareo' escrito en horizontal
+        total_pareos = sum_votes(pareos)
+        draw.text((iniX+20, iniY+12), f"Pareos: {total_pareos}", font=normal, fill='#333344')
         iniY += 40
         _, endY = draw_pareos(draw, iniX, iniY, pareos, total_col, grupos)
         #TODO: Cuadro delimitador de opción 'Pareo'
