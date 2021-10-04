@@ -30,7 +30,7 @@ if __name__ == "__main__":
     votacion_por_partido   = votacion_info["info_por_partido"]
     votacion_por_coalicion = votacion_info["info_por_coalicion"]
 
-    titulo = ""
+    titulo = votacion_info["titulo"]
     # Si fue ingresado como argumento, rescatamos el título de la visualización
     if len(sys.argv) > 2:
         titulo = sys.argv[2]

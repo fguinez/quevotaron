@@ -4,8 +4,10 @@ Propósito del módulo: Abstraer la generación de gráficas a diferentes contex
 
 # https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
 from palette import color_partido, color_coalicion, random_color
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageFont
+from image_utils import ImageDraw
 from math import ceil
+import textwrap
 import sys
 import os
 
@@ -14,11 +16,13 @@ import os
 
 # Situa todos los path en la carpeta draw
 path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+path_root = '/'.join(path_base.split('/')[:-1])
 
 # Se definen las tipografías a utilizar
-title    = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf',   80)
-subtitle = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
-normal   = ImageFont.truetype(f'{path_base}/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
+font_title_path = f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf'
+title    = ImageFont.truetype(font_title_path,   80)
+subtitle = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
+normal   = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
 
 R = 20
 r = 0.7 * R
@@ -263,25 +267,21 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     '''
     # Abre imagen vacía
     im   = Image.open("draw/img/plantilla.png")
-    draw = ImageDraw.Draw(im)
+    draw = ImageDraw(im)
 
     # Escribe encabezado
-    # TODO: Arreglar el ingreso de los títulos como argumento
-    #titulo = input("Ingresa un título: ")
-    titulo = "Título"
-    draw.text((100,100), titulo,    font=title,    fill='#333344')
-    #titulo = input("Ingresa un subtítulo: ")
-    subtitulo = "Subtitulo subtitulo"
-    draw.text((100,200), subtitulo, font=subtitle, fill='#9999AA')
-    draw.text((700,250), resultado, font=subtitle, fill='#AA0033')
+    title_size = draw.write_text_box((100, 100), titulo, box_width=880, box_height=200,
+                   font_filename=font_title_path, font_size='fill', color='#333344')
+    print()
+    draw.text((700,title_size[1]+150), resultado, font=subtitle, fill='#AA0033')
     if nquorum > 0:
-        draw.text((120,250), f"Quorum: {quorum}", font=subtitle, fill='#333344')
-        draw.text((120,300), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+        draw.text((120,title_size[1]+150), f"Quorum: {quorum}", font=subtitle, fill='#333344')
+        draw.text((120,title_size[1]+200), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
     total_col = 23
     global_iniX = (1080 - 40*total_col) // 2
-    global_iniY = 350
+    global_iniY = title_size[1]+300
         #   Horizontal
     total_colH = total_col - len(opcionesH)
     votosH = sum_votes((opcionesH,))
@@ -326,6 +326,13 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
 
     # Dibuja banner inferior
     # TODO: Dibujar banner inferior
-
-    #im.show()
+    
     return im
+
+
+
+
+if __name__ == "__main__":
+    titulo = "Suprime el rango etario para ejercer el permiso laboral establecido en el artículo 66 bis del Código del Trabajo."
+    dimensiones = (880, 100)
+    ajustar_fuente(title, titulo, dimensiones)

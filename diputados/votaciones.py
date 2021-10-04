@@ -21,6 +21,11 @@ def _get_data(votacion_info, dataname):
         return datatitle.find_next('strong').text.strip()
     return ""               # En caso de que no existan datos con el texto dataname
 
+# Obtiene el título de una votación por medio de su HTML
+def get_titulo(votacion_info):
+    titulo = _get_data(votacion_info, "materia")
+    return titulo
+
 # Obtiene la fecha de una votación por medio de su HTML
 def get_fecha(votacion_info):
     fecha = _get_data(votacion_info, "fecha")
@@ -65,6 +70,7 @@ def get_en_contra(votacion_info):
 def get_votacion(id):
     diputados = get_diputados()
     votacion_info = api.get_votacion(id)
+    titulo     = get_titulo(votacion_info)
     fecha      = get_fecha(votacion_info)
     tipo       = get_tipo(votacion_info)
     resultado  = get_resultado(votacion_info)
@@ -73,7 +79,7 @@ def get_votacion(id):
     abstencion = get_abstencion(votacion_info)
     en_contra  = get_en_contra(votacion_info)
     votos      = votacion_info.find_all('h3')
-    return Votacion(id, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
+    return Votacion(id, titulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
 
 
 
