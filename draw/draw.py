@@ -289,7 +289,11 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     # Escribe encabezado
     title_size = draw.write_text_box((100, -40), titulo, box_width=880, box_height=200,
                    font_filename=font_title_path, font_size='fill', color='#333344')
-    draw.text((700,title_size[1]+20), resultado, font=subtitle, fill='#AA0033')
+    if resultado.lower() == "rechazado":
+        color_resultado = '#AA0033'
+    else:
+        color_resultado = '#00AA33'
+    draw.text((700,title_size[1]+20), resultado, font=subtitle, fill=color_resultado)
     if nquorum > 0:
         draw.text((120,title_size[1]+20), f"Quorum: {quorum}", font=subtitle, fill='#333344')
         draw.text((120,title_size[1]+80), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')

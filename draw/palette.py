@@ -39,7 +39,7 @@ partidos = {
     # Unidad Constituyente
     'PS':   ['Partido Socialista',                   '#808000'],
     'PPD':  ['Partido Por la Democracia',            '#bfef45'],
-    'PL':   ['Partido Liberal',                      '#ffd8b1'],
+    'PL':   ['Partido Liberal',                      '#3cb44b'],
     'PR':   ['Partido Radical',                      '#ffe119'],
     'DC':   ['Democracia Cristiana',                 '#aaffc3'],
     # Chile Vamos
