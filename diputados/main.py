@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     #votids = [36977, 36976, 36975, 36974, 36973]
     votids = api.get_votaciones_recientes()
-    votids = [36977]
+    votids = [37007]
     if len(sys.argv) > 1:
             votids = [int(sys.argv[1])]
     

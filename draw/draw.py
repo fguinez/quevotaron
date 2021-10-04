@@ -121,6 +121,15 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
     endY = iniY +    j*R*2 + R
     return endX, endY
 
+def _draw_legend_line(draw, grupos, lenX, iniY):
+    iniX = (1080 - lenX) / 2
+    for grupo in grupos:
+        x = iniX + R
+        y = iniY + R
+        draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
+        draw.text((iniX+40,iniY+5), grupo[0], font=normal, fill='#333344')
+        iniX += 40 + normal.getsize(grupo[0])[0] + 20
+
 def draw_legend(draw, lenX, iniY, grupos):
     '''
     [draw]
@@ -138,19 +147,19 @@ def draw_legend(draw, lenX, iniY, grupos):
                         <siglaN>: [<nombreN>, <colorN>]
                     }
     '''
-    global_iniX = (1080 - lenX) / 2
-    global_endX = 1080 - global_iniX
-    global_iniY = iniY
-    iniX = global_iniX
+    line = []
+    len_line = -20
     for grupo in grupos.values():
-        endX = iniX + 40 + draw.textsize(grupo[0], font=normal)[0] + 20
-        if endX > global_endX:
+        len_line_next = len_line + 40 + normal.getsize(grupo[0])[0]
+        if len_line_next > lenX:
+            _draw_legend_line(draw, line, len_line, iniY)
+            line = []
+            len_line = -20
             iniY += 40
-        x = iniX + R
-        y = iniY + R
-        draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
-        draw.text((iniX+40,iniY), grupo[0], font=normal, fill='#333344')
-    global_endY = iniY + 40
+        line.append(grupo)
+        len_line += 20 + 40 + normal.getsize(grupo[0])[0]
+    _draw_legend_line(draw, line, len_line, iniY)
+    return iniY + 40 
     # TODO: Dibujar marco con variables global_
 
 def sum_votes(conjuntos):
@@ -171,6 +180,14 @@ def sum_votes(conjuntos):
             votes += len(conjunto) * 2
     return votes
 
+def center_image(im, height):
+    padding = (1080 - height) / 2
+    im = im.crop((0, -padding, 1080, height + padding))
+    draw = ImageDraw(im)
+    background_color = im.getpixel((1,1079))
+    draw.rectangle([(0,0),(1080, padding)], fill=background_color)
+    return im
+     
 
 def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, grupos={},
                  opcionesH={}, opcionesV={}, pareos=[]):
@@ -270,18 +287,17 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     draw = ImageDraw(im)
 
     # Escribe encabezado
-    title_size = draw.write_text_box((100, 100), titulo, box_width=880, box_height=200,
+    title_size = draw.write_text_box((100, -40), titulo, box_width=880, box_height=200,
                    font_filename=font_title_path, font_size='fill', color='#333344')
-    print()
-    draw.text((700,title_size[1]+150), resultado, font=subtitle, fill='#AA0033')
+    draw.text((700,title_size[1]+20), resultado, font=subtitle, fill='#AA0033')
     if nquorum > 0:
-        draw.text((120,title_size[1]+150), f"Quorum: {quorum}", font=subtitle, fill='#333344')
-        draw.text((120,title_size[1]+200), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+        draw.text((120,title_size[1]+20), f"Quorum: {quorum}", font=subtitle, fill='#333344')
+        draw.text((120,title_size[1]+80), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
     total_col = 23
     global_iniX = (1080 - 40*total_col) // 2
-    global_iniY = title_size[1]+300
+    global_iniY = title_size[1]+120
         #   Horizontal
     total_colH = total_col - len(opcionesH)
     votosH = sum_votes((opcionesH,))
@@ -295,6 +311,8 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         if filas == 0:
             continue
         columnas = ceil(sum(opcionesH[opcion].values()) / filas)
+        if columnas == 0:
+            continue
         endX, endY = draw_points(draw, iniX, iniY, opcionesH[opcion], columnas, grupos)
         posX.append((iniX-40, endX))
         iniX = endX
@@ -316,13 +334,15 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         iniY = endY
     if len(pareos) > 0:
         #TODO: Nombre de la opción 'Pareo' escrito en horizontal
+        iniY += 40
         _, endY = draw_pareos(draw, iniX, iniY, pareos, total_col, grupos)
         #TODO: Cuadro delimitador de opción 'Pareo'
         iniY = endY
     
+    
     # Dibuja leyenda
-    lenX = 40*total_col
-    draw_legend(draw, lenX, iniY+80, grupos)
+    global_endY = draw_legend(draw, 1000, iniY+40, grupos)
+    im = center_image(im, global_endY)
 
     # Dibuja banner inferior
     # TODO: Dibujar banner inferior
