@@ -186,7 +186,7 @@ def center_image(im, height):
     draw = ImageDraw(im)
     background_color = im.getpixel((1,1079))
     draw.rectangle([(0,0),(1080, padding)], fill=background_color)
-    return im
+    return im, padding
      
 
 def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, grupos={},
@@ -289,7 +289,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
 
     # Escribe encabezado
     title_size = draw.write_text_box((100, -40), titulo, box_width=880, box_height=200,
-                   font_filename=font_title_path, font_size='fill', color='#333344')
+                   font_filename=font_title_path, font_size='fill', color=background_color)
     if resultado.lower() == "rechazado":
         color_resultado = '#AA0033'
     else:
@@ -359,7 +359,13 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     
     # Dibuja leyenda
     global_endY = draw_legend(draw, 1000, iniY+40, grupos)
-    im = center_image(im, global_endY)
+
+    # Centra la visualización
+    im, padding = center_image(im, global_endY)
+
+    # Redibuja el título, para evitar que sea cortado por center_image
+    ImageDraw(im).write_text_box((100, padding-40), titulo, box_width=880, box_height=200,
+                   font_filename=font_title_path, font_size='fill', color='#333344')
 
     # Dibuja banner inferior
     # TODO: Dibujar banner inferior
