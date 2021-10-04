@@ -17,9 +17,9 @@ path_root = '/'.join(path_diputados.split('/')[:-1])
 
 if __name__ == "__main__":
 
-    #votids = [36472, 36976, 36975, 36974, 36973]
-    #votids = api.get_votaciones_recientes()
-    votids = [36997]
+    votids = [36472, 36976, 36975, 36974, 36973]
+    votids += api.get_votaciones_recientes()
+    votids += [36997]
     if len(sys.argv) > 1:
             votids = [int(sys.argv[1])]
     

@@ -177,7 +177,7 @@ def sum_votes(conjuntos):
             for option in conjunto:
                 votes += sum(conjunto[option].values())
         elif isinstance(conjunto, list):
-            votes += len(conjunto) * 2
+            votes += len(conjunto)
     return votes
 
 def center_image(im, height):
