@@ -72,7 +72,6 @@ class ImageDraw(ImageDraw.ImageDraw):
         if font_size > max_font_size:
             font_size = max_font_size
             y -= 10
-        print(font_size)
         lines = []
         line = []
         words = text.split()

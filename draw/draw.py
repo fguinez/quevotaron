@@ -306,7 +306,7 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
         #   Horizontal
     total_colH = total_col - len(opcionesH)
     votosH = sum_votes((opcionesH,))
-    filas = floor(votosH / total_colH) + 1
+    filas = floor(votosH / (total_colH-1)) + 1
     iniX, iniY  = (global_iniX, global_iniY)
     endY_max = -1
     posX = [] # Guarda las posiciones de inicio y término de cada opción

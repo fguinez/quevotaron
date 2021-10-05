@@ -14,12 +14,21 @@ path_root = '/'.join(path_diputados.split('/')[:-1])
 
 
 
+def get_save_votids():
+    path_data = f'{path_root}/draw/data/diputados'
+    filenames = os.listdir(path_data)
+    votids = [filename.split('.')[0] for filename in filenames if filename.split('.')[0]]
+    return votids
+
+
+
 
 if __name__ == "__main__":
 
     #votids = [36472, 36976, 36975, 36974, 36973]
     #votids += api.get_votaciones_recientes()
-    votids = [36472, 37017, 37020, 36971]
+    #votids = [37020]
+    votids = get_save_votids()
     if len(sys.argv) > 1:
             votids = [int(sys.argv[1])]
     
