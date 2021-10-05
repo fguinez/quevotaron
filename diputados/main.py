@@ -1,6 +1,6 @@
 from votaciones import get_votacion
 import api
-import pickle
+import json
 import sys
 import os
 
@@ -27,15 +27,15 @@ if __name__ == "__main__":
         print(votid)
 
         # Define el path a la información necesaria para crear la visualización
-        filename = f"{votid}.pkl"
+        filename = f"{votid}.json"
         path = f"{path_root}/draw/data/diputados/{filename}"
 
         if not os.path.exists(path):
             # Obtenemos la información de la votación
             votacion = get_votacion(votid)
             # Guardamos el objeto de la votación
-            with open(path, 'wb') as file:
-                pickle.dump(votacion.json, file)
+            with open(path, 'w') as file:
+                json.dump(votacion.json, file)
 
         titulo = ""
         # Si fue ingresado como argumento, rescatamos el título de la visualización

@@ -1,6 +1,6 @@
 from draw import create_image
 from palette import partidos, coaliciones
-import pickle
+import json
 import sys
 import os
 
@@ -22,8 +22,8 @@ if __name__ == "__main__":
     votid = path_votacion.split('/')[-1].split('.')[0]
 
     # Cargamos el objeto Votación
-    with open(path_votacion, 'rb') as file:
-        votacion_info = pickle.load(file)
+    with open(path_votacion, 'r') as file:
+        votacion_info = json.load(file)
     resultado              = votacion_info["resultado"]
     quorum                 = votacion_info["quorum"]
     nquorum                = votacion_info["nquorum"]
