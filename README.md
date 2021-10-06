@@ -45,3 +45,10 @@ Algunos ejemlos de commits válidos pueden ser:
 - ✨ Implementa búsqueda binaria
 
 Para un mayor detalle, se recomienda visitar [esta](https://gist.github.com/nebil/f96a2f0bfe1e059d589d6a2190a2ac81#file-styleguide-es-md) guía de estilo más completa.
+
+
+## Referencias
+
+- Datavizcatalogue. _Gráfico de Matriz de Puntos_. Ver [aquí](https://datavizcatalogue.com/ES/metodos/grafico_de_matriz_de_puntos.html).
+  
+- Unholster (Decide Chile). _Elección 2021: Constituyentes_. Ver [aquí](https://2021.decidechile.cl/#/ev/2021/ct/2021.N/)
