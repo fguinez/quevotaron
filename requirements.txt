@@ -4,3 +4,5 @@ xmltojson
 utils
 lxml
 pillow
+tweepy
+python-dotenv
