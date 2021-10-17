@@ -16,12 +16,6 @@ los métodos de `api` para terminar de procesar la información. Esto podría co
   - Esto podría implicar desconocer quienes se ausentaron de la sala en ese momento
     - Posible solución: Filtrar los diputados vigentes al momento de votar por la fecha de votación
 
-- Diseñar plantilla de imagen
-
-- Solucionar bugs en distribución de puntos en imagen
-
-- Automatizar mapeo de resultados a imagen
-
 
 ## Requisitos
 
