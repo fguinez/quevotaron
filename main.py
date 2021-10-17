@@ -1,4 +1,4 @@
-import path
+from utils import path
 import tweepy
 import time
 from dotenv import dotenv_values
