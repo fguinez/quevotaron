@@ -1,5 +1,6 @@
 # Others
 *.webloc
+tmp
 
 # VSCode
 *.code-workspace
