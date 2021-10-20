@@ -3,20 +3,26 @@ Propósito del módulo: Abstraer la generación de gráficas a diferentes contex
 '''
 
 # https://pillow.readthedocs.io/en/stable/reference/ImageDraw.html
-from palette import color_partido, color_coalicion, random_color
 from PIL import Image, ImageFont
-from image_utils import ImageDraw
 from math import floor, ceil
 import textwrap
 import sys
 import os
+if os.getcwd()[4:] == "draw":
+    from image_utils import ImageDraw
+    from palette import color_partido, color_coalicion, random_color
+
+    path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+    path_root = '/'.join(path_base.split('/')[:-1])
+else:
+    from draw.image_utils import ImageDraw
+    from draw.palette import color_partido, color_coalicion, random_color
+
+    path_root = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+    path_base = f"{path_root}/draw"
 
 
 
-
-# Situa todos los path en la carpeta draw
-path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
-path_root = '/'.join(path_base.split('/')[:-1])
 
 # Se definen las tipografías a utilizar
 font_title_path = f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf'

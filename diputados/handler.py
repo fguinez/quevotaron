@@ -3,14 +3,19 @@ import time
 import os
 import sys
 
-from   models import Diputado
-import api
+if os.getcwd()[9:] == "diputados":
+    from   models import Diputado
+    import api
+
+    path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+else:
+    from   diputados.models import Diputado
+    import diputados.api as api
+
+    path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1]) + '/diputados'
 
 
-
-
-# Situa todos los path en la carpeta diputados
-path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+    
 
 Militancia = namedtuple('Militancia', ['partido','coalicion','nombre']) 
 

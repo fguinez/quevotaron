@@ -1,6 +1,12 @@
-from   models import Votacion
-from   handler import get_diputados
-import api
+import os
+if os.getcwd()[9:] == "diputados":
+    from   models import Votacion
+    from   handler import get_diputados
+    import api
+else:
+    from   diputados.models import Votacion
+    from   diputados.handler import get_diputados
+    import diputados.api as api
 
 
 # Recibe una fecha con el nombr completo del mes en español y lo reemplaza por

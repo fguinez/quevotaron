@@ -10,7 +10,10 @@ import os
 
 
 # Situa todos los path en la carpeta diputados
-path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+if os.getcwd()[9:] == "diputados":
+    path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
+else:
+    path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1]) + '/diputados'
 
 url_base  = 'http://opendata.camara.cl/camaradiputados/WServices/'
 url_base2 = 'http://opendata.camara.cl/wscamaradiputados.asmx/'

@@ -1,5 +1,6 @@
-from diputados import api
-from utils import osx
+from diputados import api, votaciones
+from draw import generar_visualizaciones
+from utils import osx, color
 import tweepy
 import time
 import os
@@ -23,37 +24,52 @@ class Bot:
         if not os.path.exists(path):
             osx.create_file(path)
         with open(path, 'r') as file:
-            ultimas_votaciones_publicadas = file.read().splitlines()
-        return ultimas_votaciones_publicadas
+            ultimas_votaciones_publicadas = file.read().strip().splitlines()
+        return [int(v) for v in ultimas_votaciones_publicadas]
 
     def write_ultimas_votaciones_publicadas(self):
         path = f"{osx.this_file()}/tmp/ultimas_votaciones_publicadas.txt"
         if not os.path.exists(path):
             osx.create_file(path)
         with open(path, 'w') as file:
-            for votid in self.ultimas_votaciones_publicadas:
+            for votid in self.ultimas_votaciones_publicadas[-30:]:
                 file.write(str(votid) + '\n')
 
     def run(self, sleep=10):
         while True:
             nuevas_votaciones = self.get_nuevas_votaciones()
             for votid in nuevas_votaciones:
-                # Obtiene datos de votid
-                pass
-                # Genera visualizaciones de voitid
-                #media_ids = pass
-                # Twittea votid
-                self.tweet_votacion(votid, media_ids)
+                try:
+                    print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
+                    # Obtiene datos de votid
+                    votacion_info = votaciones.get_votacion(votid).json
+                    # Genera visualizaciones de voitid
+                    media_paths = generar_visualizaciones(votid, votacion_info)
+                    # Twittea votid
+                    self.tweet_votacion(votid, media_paths)
+                    print(f"Votación {votid}:", color.g("Publicada"))
+                except KeyboardInterrupt:
+                    self.write_ultimas_votaciones_publicadas()
+                    print("\n*beep boop* Adiós!")
+                    exit()
+                except Exception as err:
+                    print(f"Votación {votid}:", color.r("Error"))
+                    print(err)
             time.sleep(sleep)
 
     def get_nuevas_votaciones(self):
-        recent = api.get_votaciones_recientes()
+        recientes = api.get_votaciones_recientes()
+        publicadas = self.ultimas_votaciones_publicadas
+        nuevas_votaciones = set(recientes) - set(publicadas)
+        return list(nuevas_votaciones)
 
-    def tweet_votacion(self, votid, media_ids):
+    def tweet_votacion(self, votid, media_paths):
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
         tweet_text = f'Detalle de la votación: {link}'
+        media_ids = [self.api_twitter.media_upload(i).media_id_string  for i in media_paths]
         status = self.api_twitter.update_status(status=tweet_text, media_ids=media_ids)
+        self.ultimas_votaciones_publicadas.append(votid)
         return status
 
 
@@ -61,8 +77,4 @@ class Bot:
 
 if __name__ == "__main__":
     bot = Bot()
-    #bot.run()
-    #a = bot.write_ultimas_votaciones_publicadas()
-    print(bot.ultimas_votaciones_publicadas)
-    bot.ultimas_votaciones_publicadas.append(123456)
-    bot.write_ultimas_votaciones_publicadas()
+    bot.run()
