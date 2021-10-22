@@ -84,3 +84,13 @@ class Bot:
 if __name__ == "__main__":
     bot = Bot()
     bot.run()
+    
+    exit()
+
+    votids = osx.get_gen_votids()
+    for votid in votids:
+        print(votid)
+        paths = bot.procesar_votid(votid, tweet=False)
+        for p in paths:
+            print(p)
+        print()

@@ -116,8 +116,8 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
     iniY = iniY + R
     d = 0
     for grupo1, grupo2 in pareos:
-        i = d %  cols
-        j = d // cols
+        i = d %  (cols if cols%2==2 else cols-1)
+        j = d // (cols if cols%2==2 else cols-1)
         x = iniX + i*R*2
         y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)

@@ -13,6 +13,7 @@ def get_save_votids():
     path_data = f'{this_file()}/draw/data/diputados'
     filenames = os.listdir(path_data)
     votids = [filename.split('.')[0] for filename in filenames if filename.split('.')[0]]
+    votids.sort()
     return votids
 
 def get_gen_votids():
@@ -21,6 +22,7 @@ def get_gen_votids():
     names = [filename.split('.')[0] for filename in filenames if filename.split('.')[0]]
     names = filter(lambda name: name.split('_')[1] == "partidos", names)
     votids = [name.split('_')[0] for name in names]
+    votids.sort()
     return votids
 
 def create_file(path):
