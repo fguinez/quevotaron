@@ -1,6 +1,9 @@
 # Others
 *.webloc
 tmp
+client_secret_*.apps.googleusercontent.com.json
+settings.yaml
+credentials.json
 
 # VSCode
 *.code-workspace

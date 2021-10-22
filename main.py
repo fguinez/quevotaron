@@ -1,7 +1,10 @@
 from diputados import api, votaciones
 from draw import generar_visualizaciones
 from utils import osx, color
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
 import tweepy
+import json
 import time
 import os
 from dotenv import dotenv_values
@@ -13,9 +16,19 @@ env = dotenv_values(osx.this_file()+"/.env")
 
 class Bot:
     def __init__(self):
-        self.auth_twitter = tweepy.OAuthHandler(env['API_KEY'], env['API_KEY_SECRET'])
-        self.auth_twitter.set_access_token(env['ACCESS_TOKEN'], env['ACCESS_TOKEN_SECRET'])
-        self.api_twitter = tweepy.API(self.auth_twitter)
+        # Twitter
+        auth_twitter = tweepy.OAuthHandler(env['API_KEY'], env['API_KEY_SECRET'])
+        auth_twitter.set_access_token(env['ACCESS_TOKEN'], env['ACCESS_TOKEN_SECRET'])
+        self.twitter = tweepy.API(auth_twitter)
+        # Drive
+        gauth = GoogleAuth()           
+        self.drive = GoogleDrive(gauth)  
+        self.folders = {
+            'html': "1quICwB6EvhRqzjh1BBkiUaE7Xbtf81DF",
+            'json': "1cZTZRe58wHsO9ww_SPmoiSMg2CWSkzRr",
+            'vis':  "1Snf3bP4tHCX7JxtJcKKRDEi_I7_vVLFT"
+        }
+
         self.ultimas_votaciones_publicadas = self.read_ultimas_votaciones_publicadas()
 
     @staticmethod
@@ -35,7 +48,15 @@ class Bot:
             for votid in self.ultimas_votaciones_publicadas[-30:]:
                 file.write(str(votid) + '\n')
 
-    def procesar_votid(self, votid, tweet=True):
+    @staticmethod
+    def write_votacion_info(votacion_info):
+        path = f"{osx.this_file()}/tmp/json/{votacion_info['id']}.json"
+        if not os.path.exists(path):
+            osx.create_file(path)
+        with open(path, 'w') as file:
+            json.dump(votacion_info, file)
+
+    def procesar_votid(self, votid, tweet=True, cloud=True):
         # Obtiene datos de votid
         votacion_info = votaciones.get_votacion(votid).json
         # Genera visualizaciones de voitid
@@ -43,6 +64,10 @@ class Bot:
         if tweet:
             # Twittea votid
             self.tweet_votacion(votid, media_paths)
+        if cloud:
+            self.write_votacion_info(votacion_info)
+            # Sube la info a Google Drive
+            self.subir_a_drive(votid)
         return media_paths
 
     def run(self, sleep=10):
@@ -73,24 +98,43 @@ class Bot:
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
         tweet_text = f'Detalle de la votación: {link}'
-        media_ids = [self.api_twitter.media_upload(i).media_id_string  for i in media_paths]
-        status = self.api_twitter.update_status(status=tweet_text, media_ids=media_ids)
+        media_ids = [self.twitter.media_upload(i).media_id_string  for i in media_paths]
+        status = self.twitter.update_status(status=tweet_text, media_ids=media_ids)
         self.ultimas_votaciones_publicadas.append(votid)
         return status
 
+    def _subir_a_drive(self, filename, path, folder):
+        gfile = self.drive.CreateFile({
+            'title': filename,
+            'parents': [{'id': folder}]
+        })
+        gfile.SetContentFile(path)
+        gfile.Upload()
+
+    def subir_a_drive(self, votid):
+        path = f'diputados/data/votaciones/{votid}.html'
+        self._subir_a_drive(f"{votid}.html", path, self.folders['html'])
+        path = f'tmp/json/{votid}.json'
+        self._subir_a_drive(f"{votid}.json", path, self.folders['json'])
+        path = f'visualizaciones/{votid}_coaliciones.png'
+        self._subir_a_drive(f"{votid}_coaliciones.png", path, self.folders['vis'])
+        path = f'visualizaciones/{votid}_partidos.png'
+        self._subir_a_drive(f"{votid}_partidos.png", path, self.folders['vis'])
 
 
 
 if __name__ == "__main__":
     bot = Bot()
-    bot.run()
+    #bot.run()
     
-    exit()
+    #exit()
 
+    # Debug
     votids = osx.get_gen_votids()
+    votids = [37093]
     for votid in votids:
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=False)
+        paths = bot.procesar_votid(votid, tweet=False, cloud=False)
         for p in paths:
             print(p)
         print()

@@ -6,3 +6,4 @@ lxml
 pillow
 tweepy
 python-dotenv
+PyDrive2
