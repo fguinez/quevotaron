@@ -10,7 +10,7 @@ import os
 
 
 # Situa todos los path en la carpeta diputados
-if os.getcwd()[9:] == "diputados":
+if os.getcwd()[-9:] == "diputados":
     path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
 else:
     path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1]) + '/diputados'

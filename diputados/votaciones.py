@@ -1,5 +1,5 @@
 import os
-if os.getcwd()[9:] == "diputados":
+if os.getcwd()[-9:] == "diputados":
     from   models import Votacion
     from   handler import get_diputados
     import api
@@ -32,6 +32,11 @@ def get_titulo(votacion_info):
     titulo = _get_data(votacion_info, "materia")
     return titulo
 
+# Obtiene el subtítulo de una votación por medio de su HTML
+def get_subtitulo(votacion_info):
+    titulo = _get_data(votacion_info, "artículo")
+    return titulo
+
 # Obtiene la fecha de una votación por medio de su HTML
 def get_fecha(votacion_info):
     fecha = _get_data(votacion_info, "fecha")
@@ -39,10 +44,8 @@ def get_fecha(votacion_info):
 
 # Obtiene el tipo de una votación por medio de su HTML
 def get_tipo(votacion_info):
-    artículo = _get_data(votacion_info, "artículo")
-    if artículo:
-        return "Particular"
-    return "General"
+    resultado = _get_data(votacion_info, "tipo de votación")
+    return resultado
 
 # Obtiene el resultado de la votación por medio de su HTML
 def get_resultado(votacion_info):
@@ -77,6 +80,7 @@ def get_votacion(id):
     diputados = get_diputados()
     votacion_info = api.get_votacion(id)
     titulo     = get_titulo(votacion_info)
+    subtitulo  = get_subtitulo(votacion_info)
     fecha      = get_fecha(votacion_info)
     tipo       = get_tipo(votacion_info)
     resultado  = get_resultado(votacion_info)
@@ -85,7 +89,7 @@ def get_votacion(id):
     abstencion = get_abstencion(votacion_info)
     en_contra  = get_en_contra(votacion_info)
     votos      = votacion_info.find_all('h3')
-    return Votacion(id, titulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
+    return Votacion(id, titulo, subtitulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
 
 
 

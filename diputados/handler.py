@@ -3,7 +3,7 @@ import time
 import os
 import sys
 
-if os.getcwd()[9:] == "diputados":
+if os.getcwd()[-9:] == "diputados":
     from   models import Diputado
     import api
 

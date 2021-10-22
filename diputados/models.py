@@ -35,9 +35,10 @@ class Diputado:
             self.pareo_id = pareo_id
 
 class Votacion:
-    def __init__(self, id, titulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos):
+    def __init__(self, id, titulo, subtitulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos):
         self.id         = int(id)
         self.titulo     = titulo
+        self.subtitulo  = subtitulo
         self.fecha      = time.strptime(fecha, '%d %m %Y')
         self.tipo       = tipo
         self.resultado  = resultado
@@ -153,6 +154,7 @@ class Votacion:
         return {
             "id": self.id,
             "titulo": self.titulo,
+            "subtitulo": self.subtitulo,
             "fecha": self.fecha,
             "tipo": self.tipo,
             "resultado": self.resultado,

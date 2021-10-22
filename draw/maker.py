@@ -8,7 +8,7 @@ from math import floor, ceil
 import textwrap
 import sys
 import os
-if os.getcwd()[4:] == "draw":
+if os.getcwd()[-4:] == "draw":
     from image_utils import ImageDraw
     from palette import color_partido, color_coalicion, random_color
 
@@ -27,7 +27,8 @@ else:
 # Se definen las tipografías a utilizar
 font_title_path = f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Bold.ttf'
 title    = ImageFont.truetype(font_title_path,   80)
-subtitle = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 40)
+font_subtitle_path = f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf'
+subtitle = ImageFont.truetype(font_subtitle_path, 40)
 normal   = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
 
 R = 20
@@ -195,7 +196,7 @@ def center_image(im, height):
     return im, padding
      
 
-def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, grupos={},
+def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquorum=-1, grupos={},
                  opcionesH={}, opcionesV={}, pareos=[]):
     '''
     ----------
@@ -296,19 +297,27 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     # Escribe encabezado
     title_size = draw.write_text_box((100, -40), titulo, box_width=880, box_height=200,
                    font_filename=font_title_path, font_size='fill', color=background_color)
+    bajada_pos = [100, title_size[1]+5]
+    bajada = tipo
+    if subtitulo:
+        bajada += f": {subtitulo}"
+    bajada_size = draw.write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
+                   font_filename=font_subtitle_path, font_size='fill', color=background_color,
+                   max_font_size=25)
+    headerH = title_size[1] + bajada_size[1] + 15
     if resultado.lower() == "rechazado":
         color_resultado = '#AA0033'
     else:
         color_resultado = '#00AA33'
-    draw.text((700,title_size[1]+20), resultado, font=subtitle, fill=color_resultado)
+    draw.text((700,headerH+20), resultado, font=subtitle, fill=color_resultado)
     if nquorum > 0:
-        draw.text((120,title_size[1]+20), f"Quorum: {quorum}", font=subtitle, fill='#333344')
-        draw.text((130,title_size[1]+70), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
+        draw.text((120,headerH+20), f"Quorum: {quorum}", font=subtitle, fill='#333344')
+        draw.text((130,headerH+70), f"Votos necesarios: {nquorum}", font=normal, fill='#9999AA')
 
     # Dibuja opciones
     total_col = 23
     global_iniX = (1080 - 40*total_col) // 2
-    global_iniY = title_size[1]+120
+    global_iniY = headerH+120
         #   Horizontal
     total_colH = total_col - len(opcionesH)
     votosH = sum_votes((opcionesH,))
@@ -372,6 +381,10 @@ def create_image(titulo='', subtitulo='', resultado='', quorum='', nquorum=-1, g
     # Redibuja el título, para evitar que sea cortado por center_image
     ImageDraw(im).write_text_box((100, padding-40), titulo, box_width=880, box_height=200,
                    font_filename=font_title_path, font_size='fill', color='#333344')
+    bajada_pos[1] += padding
+    ImageDraw(im).write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
+                   font_filename=font_subtitle_path, font_size='fill', color='#9999AA',
+                   max_font_size=25)
 
     # Dibuja banner inferior
     # TODO: Dibujar banner inferior

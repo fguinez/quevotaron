@@ -1,5 +1,5 @@
 from votaciones import get_votacion
-import api
+import api as api
 import json
 import sys
 import os

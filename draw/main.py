@@ -1,7 +1,8 @@
 import json
 import sys
 import os
-if os.getcwd()[4:] == "draw":
+
+if os.getcwd()[-4:] == "draw":
     from maker import create_image
     from palette import partidos, coaliciones
 
@@ -22,6 +23,8 @@ else:
 
 
 def generar_visualizaciones(votid, votacion_info, titulo=None):
+    subtitulo              = votacion_info["subtitulo"]
+    tipo                   = votacion_info["tipo"]
     resultado              = votacion_info["resultado"]
     quorum                 = votacion_info["quorum"]
     nquorum                = votacion_info["nquorum"]
@@ -37,15 +40,15 @@ def generar_visualizaciones(votid, votacion_info, titulo=None):
 
     # Creamos la visualización por partidos
     opcionesH, opcionesV, pareos = votacion_por_partido
-    im = create_image(titulo, resultado=resultado, quorum=quorum,
-                      nquorum=nquorum, grupos=partidos,
+    im = create_image(titulo, subtitulo, tipo, resultado=resultado,
+                      quorum=quorum, nquorum=nquorum, grupos=partidos,
                       opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
     im.save(path_partidos)
 
     # Creamos la visualización por coalicion
     opcionesH, opcionesV, pareos = votacion_por_coalicion
-    im = create_image(titulo, resultado=resultado, quorum=quorum,
-                      nquorum=nquorum, grupos=coaliciones,
+    im = create_image(titulo, subtitulo, tipo, resultado=resultado,
+                      quorum=quorum, nquorum=nquorum, grupos=coaliciones,
                       opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
     im.save(path_coaliciones)
 

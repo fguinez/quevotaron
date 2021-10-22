@@ -35,27 +35,33 @@ class Bot:
             for votid in self.ultimas_votaciones_publicadas[-30:]:
                 file.write(str(votid) + '\n')
 
+    def procesar_votid(self, votid, tweet=True):
+        # Obtiene datos de votid
+        votacion_info = votaciones.get_votacion(votid).json
+        # Genera visualizaciones de voitid
+        media_paths = generar_visualizaciones(votid, votacion_info)
+        if tweet:
+            # Twittea votid
+            self.tweet_votacion(votid, media_paths)
+        return media_paths
+
     def run(self, sleep=10):
         while True:
-            nuevas_votaciones = self.get_nuevas_votaciones()
-            for votid in nuevas_votaciones:
-                try:
-                    print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
-                    # Obtiene datos de votid
-                    votacion_info = votaciones.get_votacion(votid).json
-                    # Genera visualizaciones de voitid
-                    media_paths = generar_visualizaciones(votid, votacion_info)
-                    # Twittea votid
-                    self.tweet_votacion(votid, media_paths)
-                    print(f"Votación {votid}:", color.g("Publicada"))
-                except KeyboardInterrupt:
-                    self.write_ultimas_votaciones_publicadas()
-                    print("\n*beep boop* Adiós!")
-                    exit()
-                except Exception as err:
-                    print(f"Votación {votid}:", color.r("Error"))
-                    print(err)
-            time.sleep(sleep)
+            try:
+                nuevas_votaciones = self.get_nuevas_votaciones()
+                for votid in nuevas_votaciones:
+                    try:
+                        print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
+                        self.procesar_votid(votid)
+                        print(f"Votación {votid}:", color.g("Publicada"))
+                    except Exception as err:
+                        print(f"Votación {votid}:", color.r("Error"))
+                        print(err)
+                time.sleep(sleep)
+            except KeyboardInterrupt:
+                self.write_ultimas_votaciones_publicadas()
+                print("\n*beep boop* Adiós!")
+                exit()
 
     def get_nuevas_votaciones(self):
         recientes = api.get_votaciones_recientes()
@@ -77,4 +83,11 @@ class Bot:
 
 if __name__ == "__main__":
     bot = Bot()
-    bot.run()
+    #bot.run()
+    votids = osx.get_gen_votids()
+    for votid in votids:
+        print(votid)
+        paths = bot.procesar_votid(votid, tweet=False)
+        for p in paths:
+            print(p)
+        print()

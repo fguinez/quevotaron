@@ -62,7 +62,8 @@ class ImageDraw(ImageDraw.ImageDraw):
            (box_width is not None and box_height is not None):
             font_size = -1
             for lines in range(1, 10):
-                wrapped_text = textwrap.fill(text, width=len(text)//lines)
+                width = max(len(text)//lines, 1)
+                wrapped_text = textwrap.fill(text, width=width)
                 new_font_size = self.get_font_size(wrapped_text, font_filename, box_width,
                                            box_height)
                 if new_font_size > font_size:
