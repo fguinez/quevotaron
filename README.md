@@ -6,6 +6,8 @@ Proyecto destinado a visibilizar las votaciones de proyectos de ley del Congreso
 
 ## Por hacer
 
+- Añadir [antialias](https://en.wikipedia.org/wiki/Spatial_anti-aliasing) a los círculos.
+- Respaldar la información (html, json y png) en la nube.
 - Fusionar los módulos `api`, `handler` y `votaciones`. Actualmente `api` se encarga solo de realizar los requests y parsear a bs4 los HTML, mientras que `handler` y `votaciones` llaman a
 los métodos de `api` para terminar de procesar la información. Esto podría considerarse un _code smell_ ([message chains](https://refactoring.guru/smells/message-chains)).
   - Hay dos posibles soluciones:
