@@ -92,8 +92,8 @@ def get_proyecto(prmNumeroBoletin):
 
 # Obtiene los resultados de una votación
 # URL utilizada: https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={}
-def get_votacion(prmVotacionID):
-    path = f'{path_base}/data/votaciones/{prmVotacionID}.html'
+def get_votacion(prmVotacionID, path=f'tmp/html'):
+    path = f'{path}/{prmVotacionID}.html'
     url = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={prmVotacionID}'
     data = _get_data(path, url)
     return data

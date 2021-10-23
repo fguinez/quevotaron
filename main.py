@@ -49,6 +49,14 @@ class Bot:
                 file.write(str(votid) + '\n')
 
     @staticmethod
+    def read_votacion_info():
+        path = f"{osx.this_file()}/tmp/html"
+        if not os.path.exists(path):
+            osx.create_dirs(path)
+        votacion_info = votaciones.get_votacion(votid, path=path).json
+        return votacion_info
+
+    @staticmethod
     def write_votacion_info(votacion_info):
         path = f"{osx.this_file()}/tmp/json/{votacion_info['id']}.json"
         if not os.path.exists(path):
@@ -58,7 +66,7 @@ class Bot:
 
     def procesar_votid(self, votid, tweet=True, cloud=True):
         # Obtiene datos de votid
-        votacion_info = votaciones.get_votacion(votid).json
+        votacion_info = self.read_votacion_info()
         # Genera visualizaciones de voitid
         media_paths = generar_visualizaciones(votid, votacion_info)
         if tweet:
@@ -130,8 +138,8 @@ if __name__ == "__main__":
     #exit()
 
     # Debug
-    votids = osx.get_gen_votids()
-    votids = [37093]
+    votids = osx.get_gen_votids()[:1]
+    #votids = [37093]
     for votid in votids:
         print(votid)
         paths = bot.procesar_votid(votid, tweet=False, cloud=False)

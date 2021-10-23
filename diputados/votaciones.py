@@ -76,9 +76,9 @@ def get_en_contra(votacion_info):
     return int(en_contra)
 
 # Obtiene el objeto votación asociado al id entregado
-def get_votacion(id):
+def get_votacion(id, path=f'tmp/html'):
     diputados = get_diputados()
-    votacion_info = api.get_votacion(id)
+    votacion_info = api.get_votacion(id, path)
     titulo     = get_titulo(votacion_info)
     subtitulo  = get_subtitulo(votacion_info)
     fecha      = get_fecha(votacion_info)

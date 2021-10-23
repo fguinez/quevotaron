@@ -32,3 +32,10 @@ def create_file(path):
         if not os.path.exists(semipath):
             os.mkdir(semipath)
     open(path, 'a').close()
+
+def create_dirs(path):
+    dirs = path.strip('/').split('/')
+    for i in range(len(dirs)):
+        semipath = '/'+'/'.join(dirs[:i+1])
+        if not os.path.exists(semipath):
+            os.mkdir(semipath)
