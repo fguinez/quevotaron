@@ -25,17 +25,21 @@ def get_gen_votids():
     votids.sort()
     return votids
 
-def create_file(path):
+def create_file(path, abspath=False):
     dirs = path.strip('/').split('/')[:-1]
     for i in range(len(dirs)):
-        semipath = '/'+'/'.join(dirs[:i+1])
+        semipath = '/'.join(dirs[:i+1])
+        if abspath:
+            semipath = '/'+semipath
         if not os.path.exists(semipath):
             os.mkdir(semipath)
     open(path, 'a').close()
 
-def create_dirs(path):
+def create_dirs(path, abspath=False):
     dirs = path.strip('/').split('/')
     for i in range(len(dirs)):
-        semipath = '/'+'/'.join(dirs[:i+1])
+        semipath = '/'.join(dirs[:i+1])
+        if abspath:
+            semipath = '/'+semipath
         if not os.path.exists(semipath):
             os.mkdir(semipath)

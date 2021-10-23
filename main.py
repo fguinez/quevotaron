@@ -29,11 +29,24 @@ class Bot:
             'vis':  "1Snf3bP4tHCX7JxtJcKKRDEi_I7_vVLFT"
         }
 
+        # Paths
+        self.paths = {
+            'ultimas_votaciones_publicadas': "tmp/ultimas_votaciones_publicadas.txt",
+            'html': "tmp/html",
+            'json': "tmp/json",
+            'vis':  "tmp/visualizaciones"
+        }
+        for key, path in self.paths.items():
+            if key == 'ultimas_votaciones_publicadas':
+                osx.create_file(path)
+            else:
+                osx.create_dirs(path)
+
         self.ultimas_votaciones_publicadas = self.read_ultimas_votaciones_publicadas()
 
-    @staticmethod
-    def read_ultimas_votaciones_publicadas():
-        path = f"{osx.this_file()}/tmp/ultimas_votaciones_publicadas.txt"
+
+    def read_ultimas_votaciones_publicadas(self):
+        path = self.paths['ultimas_votaciones_publicadas']
         if not os.path.exists(path):
             osx.create_file(path)
         with open(path, 'r') as file:
@@ -41,26 +54,20 @@ class Bot:
         return [int(v) for v in ultimas_votaciones_publicadas]
 
     def write_ultimas_votaciones_publicadas(self):
-        path = f"{osx.this_file()}/tmp/ultimas_votaciones_publicadas.txt"
+        path = self.paths['ultimas_votaciones_publicadas']
         if not os.path.exists(path):
             osx.create_file(path)
         with open(path, 'w') as file:
             for votid in self.ultimas_votaciones_publicadas[-30:]:
                 file.write(str(votid) + '\n')
 
-    @staticmethod
-    def read_votacion_info():
-        path = f"{osx.this_file()}/tmp/html"
-        if not os.path.exists(path):
-            osx.create_dirs(path)
+    def read_votacion_info(self):
+        path = self.paths['html']
         votacion_info = votaciones.get_votacion(votid, path=path).json
         return votacion_info
 
-    @staticmethod
-    def write_votacion_info(votacion_info):
-        path = f"{osx.this_file()}/tmp/json/{votacion_info['id']}.json"
-        if not os.path.exists(path):
-            osx.create_file(path)
+    def write_votacion_info(self, votacion_info):
+        path = self.paths['json'] + f"/{votacion_info['id']}.json"
         with open(path, 'w') as file:
             json.dump(votacion_info, file)
 
@@ -68,12 +75,12 @@ class Bot:
         # Obtiene datos de votid
         votacion_info = self.read_votacion_info()
         # Genera visualizaciones de voitid
-        media_paths = generar_visualizaciones(votid, votacion_info)
+        media_paths = generar_visualizaciones(votid, votacion_info, path=self.paths['vis'])
         if tweet:
             # Twittea votid
             self.tweet_votacion(votid, media_paths)
+        self.write_votacion_info(votacion_info)
         if cloud:
-            self.write_votacion_info(votacion_info)
             # Sube la info a Google Drive
             self.subir_a_drive(votid)
         return media_paths
@@ -138,7 +145,7 @@ if __name__ == "__main__":
     #exit()
 
     # Debug
-    votids = osx.get_gen_votids()[:1]
+    votids = osx.get_gen_votids()
     #votids = [37093]
     for votid in votids:
         print(votid)

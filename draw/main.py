@@ -22,7 +22,7 @@ else:
 
 
 
-def generar_visualizaciones(votid, votacion_info, titulo=None):
+def generar_visualizaciones(votid, votacion_info, titulo=None, path='tmp/visualizaciones'):
     subtitulo              = votacion_info["subtitulo"]
     tipo                   = votacion_info["tipo"]
     resultado              = votacion_info["resultado"]
@@ -35,8 +35,8 @@ def generar_visualizaciones(votid, votacion_info, titulo=None):
     if titulo == None:
         titulo = votacion_info["titulo"]
 
-    path_partidos    = f'{path_root}/visualizaciones/{votid}_partidos.png'
-    path_coaliciones = f'{path_root}/visualizaciones/{votid}_coaliciones.png'
+    path_partidos    = f'{path}/{votid}_partidos.png'
+    path_coaliciones = f'{path}/{votid}_coaliciones.png'
 
     # Creamos la visualización por partidos
     opcionesH, opcionesV, pareos = votacion_por_partido
