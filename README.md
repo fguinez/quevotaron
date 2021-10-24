@@ -2,7 +2,12 @@
 
 - _**Nota:** Trabajo en proceso 🚧🚧🚧_
 
-Proyecto destinado a visibilizar las votaciones de proyectos de ley del Congreso chileno.
+Proyecto destinado a visibilizar las votaciones de proyectos de ley del Congreso chileno por medio de visualizaciones autogeneradas de las votaciones.
+
+Todas las visualizaciones son publicadas en nuestro Twitter:
+<p align="center">
+    <a href="https://twitter.com/quevotaron"><img src="https://imgur.com/hIXMqsE.png"> <b>@quevotaron</b></a>
+</p>
 
 ## Por hacer
 
