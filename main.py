@@ -67,14 +67,15 @@ class Bot:
         with open(path, 'w') as file:
             json.dump(votacion_info, file)
 
-    def procesar_votid(self, votid, tweet=True, cloud=True):
+    def procesar_votid(self, votid, tweet=True, cloud=True, fecha=False):
         # Obtiene datos de votid
         votacion_info = self.read_votacion_info(votid)
         # Genera visualizaciones de voitid
         media_paths = generar_visualizaciones(votid, votacion_info, path=self.paths['vis'])
         if tweet:
             # Twittea votid
-            fecha = str_fecha(votacion_info['fecha'])
+            if fecha:
+                fecha = str_fecha(votacion_info['fecha'])
             self.tweet_votacion(votid, media_paths, fecha=fecha)
         self.write_votacion_info(votacion_info)
         if cloud:
@@ -145,11 +146,13 @@ if __name__ == "__main__":
     exit()
 
     # Debug
-    #votids = osx.get_gen_votids()
-    votids = [36974]
+    votids = osx.get_gen_votids()
+    votids = filter(lambda v: v >= 36971 and v < 37071, votids)
+    print(list(votids))
+    #votids = [36974]
     for votid in votids:
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=True, cloud=False)
+        paths = bot.procesar_votid(votid, tweet=True, cloud=True, fecha=True)
         for p in paths:
             print(p)
         print()
