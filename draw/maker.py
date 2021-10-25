@@ -211,13 +211,15 @@ def sum_votes(conjuntos):
             votes += len(conjunto)
     return votes
 
-def center_image(im, height):
+def center_image(im, height, min_padding=90):
     padding = (1080 - height) / 2
-    im = im.crop((0, -padding, 1080, height + padding))
-    draw = ImageDraw(im)
-    background_color = im.getpixel((1,1079))
-    draw.rectangle([(0,0),(1080, padding)], fill=background_color)
-    return im, padding
+    if padding < min_padding:
+        padding = min_padding
+    padding = int(padding)
+    container_size = (1080, height + padding*2)
+    container = Image.open("draw/img/plantilla.png").resize(container_size)
+    container.paste(im, (0, padding))
+    return container, padding
      
 
 def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquorum=-1, grupos={},
@@ -315,7 +317,6 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     '''
     # Abre imagen vacía
     im   = Image.open("draw/img/plantilla.png")
-    background_color = im.getpixel((1,1079))
     draw = ImageDraw(im)
     draw.im_ = im
 
@@ -394,7 +395,10 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     
     # Escribir username
     # IDEA: Transformar en un banner inferior con más información
-    draw_text_horizontal(draw, "@quevotaron", (1045, iniY), font=footnote, fill='#9999AA', align='top')
+    draw_text_horizontal(
+        draw, "@quevotaron", (1040, iniY), 
+        font=footnote, fill='#9999AA', align='top'
+    )
     
     # Dibuja leyenda
     global_endY = draw_legend(draw, 1000, iniY+40, grupos)

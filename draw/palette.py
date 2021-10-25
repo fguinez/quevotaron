@@ -4,7 +4,7 @@ import random
 
 
 
-background_color = '#fffac8'
+background_color = '#fdfdbd'
 
 # Paleta de partidos (incluyendo movimientos no legalizados)
 partidos = {
