@@ -1,6 +1,6 @@
 from diputados import api, votaciones
 from draw import generar_visualizaciones
-from utils import osx, color
+from utils import osx, color, str_fecha
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 import tweepy
@@ -74,7 +74,8 @@ class Bot:
         media_paths = generar_visualizaciones(votid, votacion_info, path=self.paths['vis'])
         if tweet:
             # Twittea votid
-            self.tweet_votacion(votid, media_paths)
+            fecha = str_fecha(votacion_info['fecha'])
+            self.tweet_votacion(votid, media_paths, fecha=fecha)
         self.write_votacion_info(votacion_info)
         if cloud:
             # Sube la info a Google Drive
@@ -105,10 +106,13 @@ class Bot:
         nuevas_votaciones = set(recientes) - set(publicadas)
         return list(nuevas_votaciones)
 
-    def tweet_votacion(self, votid, media_paths):
+    def tweet_votacion(self, votid, media_paths, fecha=None):
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
-        tweet_text = f'Detalle de la votación: {link}'
+        tweet_text = f'Votación {votid}\n\n'
+        if fecha:
+            tweet_text += f'Fecha: {fecha}\n'
+        tweet_text += f'Detalle: {link}'
         media_ids = [self.twitter.media_upload(i).media_id_string  for i in media_paths]
         status = self.twitter.update_status(status=tweet_text, media_ids=media_ids)
         self.ultimas_votaciones_publicadas.append(votid)
@@ -142,10 +146,10 @@ if __name__ == "__main__":
 
     # Debug
     #votids = osx.get_gen_votids()
-    votids = [37020]
+    votids = [36974]
     for votid in votids:
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=False, cloud=False)
+        paths = bot.procesar_votid(votid, tweet=True, cloud=False)
         for p in paths:
             print(p)
         print()
