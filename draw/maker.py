@@ -10,13 +10,13 @@ import sys
 import os
 if os.getcwd()[-4:] == "draw":
     from image_utils import ImageDraw
-    from palette import color_partido, color_coalicion, random_color
+    from palette import color_partido, color_coalicion, random_color, background_color
 
     path_base = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
     path_root = '/'.join(path_base.split('/')[:-1])
 else:
     from draw.image_utils import ImageDraw
-    from draw.palette import color_partido, color_coalicion, random_color
+    from draw.palette import color_partido, color_coalicion, random_color, background_color
 
     path_root = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1])
     path_base = f"{path_root}/draw"
@@ -46,6 +46,14 @@ def sort_group(group):
         group.remove('IND')
         group.append('IND')
     return group
+
+def draw_point(draw, x, y, r, color):
+    r = int(r)
+    container = Image.new('RGB', (r*50, r*50), color=background_color)
+    draw_container = ImageDraw(container)
+    draw_container.ellipse((0, 0, r*50, r*50), fill=color)
+    container = container.resize((r*2, r*2), Image.LANCZOS)
+    draw.im_.paste(container, (x-r, y-r))
 
 def draw_points(draw, iniX, iniY, votos, cols, grupos):
     '''
@@ -80,7 +88,7 @@ def draw_points(draw, iniX, iniY, votos, cols, grupos):
             j = d // cols
             x = iniX + i*R*2
             y = iniY + j*R*2
-            draw.ellipse((x-r, y-r, x+r, y+r), fill=color)
+            draw_point(draw, x, y, r, color)
             d += 1
     endX = iniX + cols*R*2 - R
     endY = iniY +    j*R*2 + R
@@ -121,8 +129,10 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
         x = iniX + i*R*2
         y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)
-        draw.ellipse((x-r,     y-r, x+r,     y+r), fill=grupos[grupo1][1])
-        draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=grupos[grupo2][1])
+        #draw.ellipse((x-r,     y-r, x+r,     y+r), fill=grupos[grupo1][1])
+        draw_point(draw, x, y, r, grupos[grupo1][1])
+        #draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=grupos[grupo2][1])
+        draw_point(draw, x+2*R, y, r, grupos[grupo2][1])
         d += 2
     endX = iniX + cols*R*2 - R
     endY = iniY +    j*R*2 + R
@@ -131,9 +141,10 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
 def _draw_legend_line(draw, grupos, lenX, iniY):
     iniX = (1080 - lenX) / 2
     for grupo in grupos:
-        x = iniX + R
-        y = iniY + R
-        draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
+        x = int(iniX + R)
+        y = int(iniY + R)
+        #draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
+        draw_point(draw, x, y, r, grupo[1])
         draw.text((iniX+40,iniY+5), grupo[0], font=normal, fill='#333344')
         iniX += 40 + normal.getsize(grupo[0])[0] + 20
 
@@ -293,6 +304,7 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     im   = Image.open("draw/img/plantilla.png")
     background_color = im.getpixel((1,1079))
     draw = ImageDraw(im)
+    draw.im_ = im
 
     # Escribe encabezado
     title_size = draw.write_text_box((100, -40), titulo, box_width=880, box_height=200,
