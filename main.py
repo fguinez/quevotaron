@@ -127,13 +127,13 @@ class Bot:
         gfile.Upload()
 
     def subir_a_drive(self, votid):
-        path = f'diputados/data/votaciones/{votid}.html'
+        path = f"{self.paths['html']}/{votid}.html"
         self._subir_a_drive(f"{votid}.html", path, self.folders['html'])
-        path = f'tmp/json/{votid}.json'
+        path = f"{self.paths['json']}/{votid}.json"
         self._subir_a_drive(f"{votid}.json", path, self.folders['json'])
-        path = f'visualizaciones/{votid}_coaliciones.png'
+        path = f"{self.paths['vis']}/{votid}_coaliciones.png"
         self._subir_a_drive(f"{votid}_coaliciones.png", path, self.folders['vis'])
-        path = f'visualizaciones/{votid}_partidos.png'
+        path = f"{self.paths['vis']}/{votid}_partidos.png"
         self._subir_a_drive(f"{votid}_partidos.png", path, self.folders['vis'])
 
 
@@ -145,11 +145,11 @@ if __name__ == "__main__":
     #exit()
 
     # Debug
-    votids = osx.get_gen_votids()
-    #votids = [37093]
+    #votids = osx.get_gen_votids()
+    votids = [37090]
     for votid in votids:
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=False, cloud=False)
+        paths = bot.procesar_votid(votid, tweet=True, cloud=True)
         for p in paths:
             print(p)
         print()
