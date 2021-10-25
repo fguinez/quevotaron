@@ -149,7 +149,7 @@ if __name__ == "__main__":
     votids = [37090]
     for votid in votids:
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=True, cloud=True)
+        paths = bot.procesar_votid(votid, tweet=False, cloud=False)
         for p in paths:
             print(p)
         print()

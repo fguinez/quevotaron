@@ -4,6 +4,8 @@ import random
 
 
 
+background_color = '#fffac8'
+
 # Paleta de partidos (incluyendo movimientos no legalizados)
 partidos = {
     'CS':   ['Convergencia Social',                  '#911eb4'],
