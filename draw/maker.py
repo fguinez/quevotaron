@@ -142,9 +142,7 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
         x = iniX + i*R*2
         y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)
-        #draw.ellipse((x-r,     y-r, x+r,     y+r), fill=grupos[grupo1][1])
         draw_point(draw, x, y, r, grupos[grupo1][1])
-        #draw.ellipse((x-r+2*R, y-r, x+r+2*R, y+r), fill=grupos[grupo2][1])
         draw_point(draw, x+2*R, y, r, grupos[grupo2][1])
         d += 2
     endX = iniX + cols*R*2 - R
@@ -156,7 +154,6 @@ def _draw_legend_line(draw, grupos, lenX, iniY):
     for grupo in grupos:
         x = int(iniX + R)
         y = int(iniY + R)
-        #draw.ellipse((x-r, y-r, x+r, y+r), fill=grupo[1])
         draw_point(draw, x, y, r, grupo[1])
         draw.text((iniX+40,iniY+5), grupo[0], font=normal, fill='#333344')
         iniX += 40 + normal.getsize(grupo[0])[0] + 20
@@ -368,11 +365,6 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
         iniX = endX
         if endY > endY_max:
             endY_max = endY
-    #TODO: Cuadro delimitador de cada opción
-    for iniX, endX in posX:
-        # Dibujar cuadrado desde (iniX, global_iniY) hasta (endX, endY_max)
-        pass
-    #TODO END
         #   Vertical
     iniX, iniY = (global_iniX, endY_max)
     for opcion in opcionesV:
@@ -382,7 +374,6 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
         iniY += 40
         # Dibujar votos en vertical
         _, endY = draw_points(draw, iniX, iniY, opcionesV[opcion], total_col, grupos)
-        #TODO: Cuadro delimitador de opcion
         iniY = endY
     if len(pareos) > 0:
         # Nombre de la opción 'Pareo' escrito en horizontal
@@ -390,7 +381,6 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
         draw.text((iniX+20, iniY+12), f"Pareos: {total_pareos}", font=normal, fill='#333344')
         iniY += 40
         _, endY = draw_pareos(draw, iniX, iniY, pareos, total_col, grupos)
-        #TODO: Cuadro delimitador de opción 'Pareo'
         iniY = endY
     
     # Escribir username
