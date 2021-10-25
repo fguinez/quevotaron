@@ -10,14 +10,14 @@ def this_file():
     return os.path.join(current_path, python_path).rstrip('/')
 
 def get_save_votids():
-    path_data = f'{this_file()}/draw/data/diputados'
+    path_data = f'tmp/html'
     filenames = os.listdir(path_data)
     votids = [filename.split('.')[0] for filename in filenames if filename.split('.')[0]]
     votids.sort()
     return votids
 
 def get_gen_votids():
-    path_data = f'{this_file()}/visualizaciones'
+    path_data = f'tmp/visualizaciones'
     filenames = os.listdir(path_data)
     names = [filename.split('.')[0] for filename in filenames if filename.split('.')[0]]
     names = filter(lambda name: name.split('_')[1] == "partidos", names)

@@ -30,6 +30,7 @@ title    = ImageFont.truetype(font_title_path,   80)
 font_subtitle_path = f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf'
 subtitle = ImageFont.truetype(font_subtitle_path, 40)
 normal   = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Medium.ttf', 20)
+footnote = ImageFont.truetype(f'{path_root}/draw/fonts/IBM-Plex-Sans/IBMPlexSans-Text.ttf', 20)
 
 R = 20
 r = 0.7 * R
@@ -54,6 +55,18 @@ def draw_point(draw, x, y, r, color):
     draw_container.ellipse((0, 0, r*50, r*50), fill=color)
     container = container.resize((r*2, r*2), Image.LANCZOS)
     draw.im_.paste(container, (x-r, y-r))
+
+def draw_text_horizontal(draw, text, pos, font, fill, align='bottom'):
+    x, y = pos
+    labelsize = font.getsize(text)
+    label = Image.new('RGBA', labelsize, background_color)
+    draw_label = ImageDraw(label)
+    draw_label.text((0, 0), text, font=font, fill=fill)
+    label = label.rotate(90, expand=1)
+    if align == 'bottom':
+        draw.im_.paste(label, (x, y))
+    else:
+        draw.im_.paste(label, (x, y-labelsize[0]))
 
 def draw_points(draw, iniX, iniY, votos, cols, grupos):
     '''
@@ -340,12 +353,8 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     for opcion in opcionesH:
         # Nombre de la opción escrito en vertical
         total_opcion = sum(opcionesH[opcion].values())
-        labelsize = normal.getsize(f"{opcion}: {total_opcion}")
-        label = Image.new('RGBA', labelsize, background_color)
-        draw_label = ImageDraw(label)
-        draw_label.text((0, 0), f"{opcion}: {total_opcion}", font=normal, fill='#333344')
-        label = label.rotate(90, expand=1)
-        im.paste(label, (iniX+10, iniY+20))
+        text = f"{opcion}: {total_opcion}"
+        draw_text_horizontal(draw, text, (iniX+10, iniY+20), font=normal, fill='#333344')
         # Despliegue de votos
         iniX += 40
         if filas == 0:
@@ -383,10 +392,13 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
         #TODO: Cuadro delimitador de opción 'Pareo'
         iniY = endY
     
+    # Escribir username
+    # IDEA: Transformar en un banner inferior con más información
+    draw_text_horizontal(draw, "@quevotaron", (1045, iniY), font=footnote, fill='#9999AA', align='top')
     
     # Dibuja leyenda
     global_endY = draw_legend(draw, 1000, iniY+40, grupos)
-
+    
     # Centra la visualización
     im, padding = center_image(im, global_endY)
 
@@ -396,11 +408,8 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     bajada_pos[1] += padding
     ImageDraw(im).write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
                    font_filename=font_subtitle_path, font_size='fill', color='#9999AA',
-                   max_font_size=25)
+                   max_font_size=25)    
 
-    # Dibuja banner inferior
-    # TODO: Dibujar banner inferior
-    
     return im
 
 
