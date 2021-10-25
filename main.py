@@ -47,21 +47,17 @@ class Bot:
 
     def read_ultimas_votaciones_publicadas(self):
         path = self.paths['ultimas_votaciones_publicadas']
-        if not os.path.exists(path):
-            osx.create_file(path)
         with open(path, 'r') as file:
             ultimas_votaciones_publicadas = file.read().strip().splitlines()
         return [int(v) for v in ultimas_votaciones_publicadas]
 
     def write_ultimas_votaciones_publicadas(self):
         path = self.paths['ultimas_votaciones_publicadas']
-        if not os.path.exists(path):
-            osx.create_file(path)
         with open(path, 'w') as file:
             for votid in self.ultimas_votaciones_publicadas[-30:]:
                 file.write(str(votid) + '\n')
 
-    def read_votacion_info(self):
+    def read_votacion_info(self, votid):
         path = self.paths['html']
         votacion_info = votaciones.get_votacion(votid, path=path).json
         return votacion_info
@@ -73,7 +69,7 @@ class Bot:
 
     def procesar_votid(self, votid, tweet=True, cloud=True):
         # Obtiene datos de votid
-        votacion_info = self.read_votacion_info()
+        votacion_info = self.read_votacion_info(votid)
         # Genera visualizaciones de voitid
         media_paths = generar_visualizaciones(votid, votacion_info, path=self.paths['vis'])
         if tweet:
@@ -95,7 +91,7 @@ class Bot:
                         self.procesar_votid(votid)
                         print(f"Votación {votid}:", color.g("Publicada"))
                     except Exception as err:
-                        print(f"Votación {votid}:", color.r("Error"))
+                        print(f"Votación {votid}:", color.r("Error    "))
                         print(err)
                 time.sleep(sleep)
             except KeyboardInterrupt:
@@ -140,13 +136,13 @@ class Bot:
 
 if __name__ == "__main__":
     bot = Bot()
-    #bot.run()
+    bot.run()
     
-    #exit()
+    exit()
 
     # Debug
     #votids = osx.get_gen_votids()
-    votids = [37090]
+    votids = [37020]
     for votid in votids:
         print(votid)
         paths = bot.procesar_votid(votid, tweet=False, cloud=False)
