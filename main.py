@@ -90,7 +90,7 @@ class Bot:
                 for votid in nuevas_votaciones:
                     try:
                         print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
-                        self.procesar_votid(votid)
+                        self.procesar_votid(votid, fecha=True)
                         print(f"Votación {votid}:", color.g("Publicada"))
                     except Exception as err:
                         print(f"Votación {votid}:", color.r("Error    "))
@@ -147,12 +147,16 @@ if __name__ == "__main__":
 
     # Debug
     votids = osx.get_gen_votids()
-    votids = filter(lambda v: v >= 36971 and v < 37071, votids)
-    print(list(votids))
-    #votids = [36974]
-    for votid in votids:
+    #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
+    #print(votids)
+    votids = [36395]
+    for votid in range(36892, 37071):
         print(votid)
-        paths = bot.procesar_votid(votid, tweet=True, cloud=True, fecha=True)
+        try:
+            paths = bot.procesar_votid(votid, tweet=True, cloud=True, fecha=True)
+        except IndexError as err:
+            print(votid, "no existe")
+            continue
         for p in paths:
             print(p)
         print()
