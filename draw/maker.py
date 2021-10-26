@@ -137,8 +137,8 @@ def draw_pareos(draw, iniX, iniY, pareos, cols, grupos):
     iniY = iniY + R
     d = 0
     for grupo1, grupo2 in pareos:
-        i = d %  (cols if cols%2==2 else cols-1)
-        j = d // (cols if cols%2==2 else cols-1)
+        i = d %  (cols if cols%2==0 else cols-1)
+        j = d // (cols if cols%2==0 else cols-1)
         x = iniX + i*R*2
         y = iniY + j*R*2
         draw.line([(x,y), (x+2*R, y)], fill='#000000', width=5)
@@ -313,7 +313,8 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     Una imagen con los datos ingresados
     '''
     # Abre imagen vacía
-    im   = Image.open("draw/img/plantilla.png")
+    im_size = (1080, 2000)
+    im   = Image.open("draw/img/plantilla.png").resize(im_size)
     draw = ImageDraw(im)
     draw.im_ = im
 
@@ -339,7 +340,7 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
 
     # Dibuja opciones
     total_col = 23
-    global_iniX = (1080 - 40*total_col) // 2
+    global_iniX = (1080 - 40*total_col) // 2 - 20
     global_iniY = headerH+120
         #   Horizontal
     total_colH = total_col - len(opcionesH)
@@ -370,17 +371,17 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     for opcion in opcionesV:
         # Nombre de la opción escrito en horizontal
         total_opcion = sum(opcionesV[opcion].values())
-        draw.text((iniX+20, iniY+12), f"{opcion}: {total_opcion}", font=normal, fill='#333344')
+        draw.text((iniX+60, iniY+12), f"{opcion}: {total_opcion}", font=normal, fill='#333344')
         iniY += 40
         # Dibujar votos en vertical
-        _, endY = draw_points(draw, iniX, iniY, opcionesV[opcion], total_col, grupos)
+        _, endY = draw_points(draw, iniX+40, iniY, opcionesV[opcion], total_col-1, grupos)
         iniY = endY
     if len(pareos) > 0:
         # Nombre de la opción 'Pareo' escrito en horizontal
         total_pareos = sum_votes(pareos)
-        draw.text((iniX+20, iniY+12), f"Pareos: {total_pareos}", font=normal, fill='#333344')
+        draw.text((iniX+60, iniY+12), f"Pareos: {total_pareos}", font=normal, fill='#333344')
         iniY += 40
-        _, endY = draw_pareos(draw, iniX, iniY, pareos, total_col, grupos)
+        _, endY = draw_pareos(draw, iniX+40, iniY, pareos, total_col-1, grupos)
         iniY = endY
     
     # Escribir username
