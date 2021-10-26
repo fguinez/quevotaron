@@ -56,7 +56,7 @@ class ImageDraw(ImageDraw.ImageDraw):
 
     def write_text_box(self, xy, text, box_width, box_height, font_filename,
                        font_size=11, color=(0, 0, 0), place='left',
-                       justify_last_line=False, max_font_size=55):
+                       justify_last_line=False, min_font_size=20, max_font_size=55):
         x, y = xy
         if font_size == 'fill' and \
            (box_width is not None and box_height is not None):
@@ -68,8 +68,8 @@ class ImageDraw(ImageDraw.ImageDraw):
                                            box_height)
                 if new_font_size > font_size:
                     font_size = new_font_size
-        if font_size == -1:
-            raise ValueError("Text can't be filled")
+        if font_size < min_font_size:
+            font_size = min_font_size
         if font_size > max_font_size:
             font_size = max_font_size
             y -= 10

@@ -327,7 +327,7 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     bajada_size = draw.write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
                    font_filename=font_subtitle_path, font_size='fill', color=background_color,
                    max_font_size=25)
-    headerH = title_size[1] + bajada_size[1] + 15
+    headerH = title_size[1] + bajada_size[1] + 30
     if resultado.lower() == "rechazado":
         color_resultado = '#AA0033'
     else:
