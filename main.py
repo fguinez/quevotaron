@@ -115,7 +115,7 @@ class Bot:
     def tweet_votacion(self, votid, media_paths, fecha=None):
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
-        tweet_text = f'Votación {votid}\n\n'
+        tweet_text = f'#Votación{votid}\n\n'
         if fecha:
             tweet_text += f'Fecha: {fecha}\n'
         tweet_text += f'Detalle: {link}'
