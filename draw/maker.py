@@ -213,14 +213,14 @@ def center_image(im, height, min_padding=90):
     if padding < min_padding:
         padding = min_padding
     padding = int(padding)
-    container_size = (1080, height + padding*2)
+    container_size = (1080, height + padding*2 + 10)
     container = Image.open("draw/img/plantilla.png").resize(container_size)
     container.paste(im, (0, padding))
     return container, padding
      
 
 def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquorum=-1, grupos={},
-                 opcionesH={}, opcionesV={}, pareos=[]):
+                 opcionesH={}, opcionesV={}, pareos=[], fecha='', votid=''):
     '''
     ----------
     PARÁMETROS
@@ -384,13 +384,6 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
         _, endY = draw_pareos(draw, iniX+40, iniY, pareos, total_col-1, grupos)
         iniY = endY
     
-    # Escribir username
-    # IDEA: Transformar en un banner inferior con más información
-    draw_text_horizontal(
-        draw, "@quevotaron", (1040, iniY), 
-        font=footnote, fill='#9999AA', align='top'
-    )
-    
     # Dibuja leyenda
     global_endY = draw_legend(draw, 1000, iniY+40, grupos)
     
@@ -398,13 +391,18 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     im, padding = center_image(im, global_endY)
 
     # Redibuja el título, para evitar que sea cortado por center_image
-    ImageDraw(im).write_text_box((100, padding-40), titulo, box_width=880, box_height=200,
+    draw = ImageDraw(im)
+    draw.write_text_box((100, padding-40), titulo, box_width=880, box_height=200,
                    font_filename=font_title_path, font_size='fill', color='#333344')
     bajada_pos[1] += padding
-    ImageDraw(im).write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
+    draw.write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
                    font_filename=font_subtitle_path, font_size='fill', color='#9999AA',
                    max_font_size=25)    
 
+    # Escribir banner inferior con más información
+    text = f"@QueVotaron   |   {fecha}   |   #Votación{votid}"
+    posicion_banner = (im.size[0]//2, im.size[1]-40)
+    draw.text(posicion_banner, text, font=footnote, fill='#9999AA', anchor="mt")
     return im
 
 

@@ -13,6 +13,7 @@ if os.getcwd()[-4:] == "draw":
 else:
     from draw.maker import create_image
     from draw.palette import partidos, coaliciones
+    from utils import str_fecha
 
     # Path hacia la carpeta draw
     path_draw = os.getcwd() + '/'.join([''] + sys.argv[0].split('/')[:-1]) + "/draw"
@@ -23,33 +24,38 @@ else:
 
 
 def generar_visualizaciones(votid, votacion_info, titulo=None, path='tmp/visualizaciones'):
-    subtitulo              = votacion_info["subtitulo"]
-    tipo                   = votacion_info["tipo"]
-    resultado              = votacion_info["resultado"]
-    quorum                 = votacion_info["quorum"]
-    nquorum                = votacion_info["nquorum"]
-    votacion_por_partido   = votacion_info["info_por_partido"]
-    votacion_por_coalicion = votacion_info["info_por_coalicion"]
+    subtitulo              = votacion_info['subtitulo']
+    tipo                   = votacion_info['tipo']
+    resultado              = votacion_info['resultado']
+    quorum                 = votacion_info['quorum']
+    nquorum                = votacion_info['nquorum']
+    votacion_por_partido   = votacion_info['info_por_partido']
+    votacion_por_coalicion = votacion_info['info_por_coalicion']
+    fecha                  = str_fecha(votacion_info['fecha'], sep='-')
 
     # Si no fue ingresado como argumento, rescatamos el título de votacion_info
     if titulo == None:
-        titulo = votacion_info["titulo"]
+        titulo = votacion_info['titulo']
 
     path_partidos    = f'{path}/{votid}_partidos.png'
     path_coaliciones = f'{path}/{votid}_coaliciones.png'
 
     # Creamos la visualización por partidos
     opcionesH, opcionesV, pareos = votacion_por_partido
-    im = create_image(titulo, subtitulo, tipo, resultado=resultado,
-                      quorum=quorum, nquorum=nquorum, grupos=partidos,
-                      opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
+    im = create_image(
+        titulo, subtitulo, tipo, resultado=resultado, quorum=quorum, nquorum=nquorum,
+        grupos=partidos, opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos,
+        fecha=fecha, votid=votid
+    )
     im.save(path_partidos)
 
     # Creamos la visualización por coalicion
     opcionesH, opcionesV, pareos = votacion_por_coalicion
-    im = create_image(titulo, subtitulo, tipo, resultado=resultado,
-                      quorum=quorum, nquorum=nquorum, grupos=coaliciones,
-                      opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos)
+    im = create_image(
+        titulo, subtitulo, tipo, resultado=resultado, quorum=quorum, nquorum=nquorum,
+        grupos=coaliciones, opcionesH=opcionesH, opcionesV=opcionesV, pareos=pareos,
+        fecha=fecha, votid=votid
+    )
     im.save(path_coaliciones)
 
     return [path_coaliciones, path_partidos]
