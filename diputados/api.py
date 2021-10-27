@@ -40,15 +40,35 @@ def _get_data(path, url, force_request=False, save_html=True, parser='html.parse
     data = BeautifulSoup(html, parser)
     return data
 
+def _get_tipos_votaciones_recientes(data):
+    divs = [d.find_next("div", {"class": "inferiores"}).div for d in data]
+    tipos = []
+    for div in divs:
+        if div['class'][0] == 'izq':
+            div = div.div.text.split(' ')[1].lower()
+            if div == "unica":
+                div = "única"
+            tipos.append(div)
+        else:
+            tipos.append(None)
+    return tipos
+
 # Obtiene un listado con los ids, de las últimas 20 votaciones realizadas
 # URL utilizada: https://www.camara.cl/legislacion/sala_sesiones/votaciones.aspx
-def get_votaciones_recientes():
+def get_votaciones_recientes(con_votids=True, con_tipos=True):
     url = 'https://www.camara.cl/legislacion/sala_sesiones/votaciones.aspx'
     data = _get_data("", url, save_html=False)
     data = data.find_all("div", {"class": "datos_votacion"})
-    hrefs = [d.find_next("a")["href"] for d in data]
-    votids = [int(href.split('=')[-1]) for href in hrefs]
-    return votids
+    to_return = []
+    if con_votids:
+        hrefs = [d.find_next("a")["href"] for d in data]
+        votids = [int(href.split('=')[-1]) for href in hrefs]
+        to_return.append(votids)
+    if con_tipos:
+        tipos = _get_tipos_votaciones_recientes(data)
+        to_return.append(tipos)
+    return to_return
+    
 
 # Obtiene la información de un diputado
 # URL utilizada: https://www.camara.cl/diputados/detalle/votaciones_sala.aspx?prmId={}

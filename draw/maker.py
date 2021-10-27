@@ -324,7 +324,7 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
     bajada_pos = [100, title_size[1]+5]
     bajada = tipo
     if subtitulo:
-        bajada += f": {subtitulo}"
+        bajada += f" — {subtitulo}"
     bajada_size = draw.write_text_box(bajada_pos, bajada, box_width=880, box_height=80,
                    font_filename=font_subtitle_path, font_size='fill', color=background_color,
                    max_font_size=25)

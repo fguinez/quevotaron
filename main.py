@@ -67,9 +67,11 @@ class Bot:
         with open(path, 'w') as file:
             json.dump(votacion_info, file)
 
-    def procesar_votid(self, votid, tweet=True, cloud=True, fecha=False):
+    def procesar_votid(self, votid, tipo=None, tweet=True, cloud=True, fecha=False):
         # Obtiene datos de votid
         votacion_info = self.read_votacion_info(votid)
+        if tipo:
+            votacion_info['tipo'] += f" (Votación {tipo})"
         # Genera visualizaciones de voitid
         media_paths = generar_visualizaciones(votid, votacion_info, path=self.paths['vis'])
         if tweet:
@@ -87,10 +89,10 @@ class Bot:
         while True:
             try:
                 nuevas_votaciones = self.get_nuevas_votaciones()
-                for votid in nuevas_votaciones:
+                for votid, tipo in nuevas_votaciones:
                     try:
                         print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
-                        self.procesar_votid(votid, fecha=True)
+                        self.procesar_votid(votid, tipo, fecha=True)
                         print(f"Votación {votid}:", color.g("Publicada"))
                     except Exception as err:
                         print(f"Votación {votid}:", color.r("Error    "))
@@ -102,9 +104,12 @@ class Bot:
                 exit()
 
     def get_nuevas_votaciones(self):
-        recientes = api.get_votaciones_recientes()
-        publicadas = self.ultimas_votaciones_publicadas
-        nuevas_votaciones = set(recientes) - set(publicadas)
+        ids_recientes, tipos_recientes = api.get_votaciones_recientes()
+        recientes = zip(ids_recientes, tipos_recientes)
+        ids_publicadas = self.ultimas_votaciones_publicadas
+        ids_nuevas_votaciones = set(ids_recientes) - set(ids_publicadas)
+        nuevas_votaciones = filter(lambda r: r[0] in ids_nuevas_votaciones, recientes)
+        nuevas_votaciones = sorted(nuevas_votaciones, key=lambda v: v[0])
         return list(nuevas_votaciones)
 
     def tweet_votacion(self, votid, media_paths, fecha=None):
@@ -142,18 +147,19 @@ class Bot:
 if __name__ == "__main__":
     bot = Bot()
     bot.run()
-    
+
     exit()
 
     # Debug
     votids = osx.get_gen_votids()
+    votids = bot.get_nuevas_votaciones()
     #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
     #print(votids)
-    votids = [36395]
-    for votid in range(36892, 37071):
+    #votids = [36725]
+    for votid, tipo in votids[-3:]:
         print(votid)
         try:
-            paths = bot.procesar_votid(votid, tweet=True, cloud=True, fecha=True)
+            paths = bot.procesar_votid(votid, tipo, tweet=False, cloud=False, fecha=True)
         except IndexError as err:
             print(votid, "no existe")
             continue
