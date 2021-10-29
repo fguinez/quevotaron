@@ -88,7 +88,7 @@ class Bot:
     def run(self, sleep=30):
         while True:
             try:
-                nuevas_votaciones = self.get_nuevas_votaciones()
+                nuevas_votaciones = []#self.get_nuevas_votaciones()
                 for votid, tipo in nuevas_votaciones:
                     try:
                         print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
@@ -97,15 +97,21 @@ class Bot:
                     except Exception as err:
                         print(f"Votación {votid}:", color.r("Error    "))
                         print(err)
-                time.sleep(sleep)
             except ConnectionError as err:
                 print(err)
-                print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora...")
+                print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora... ")
                 time.sleep(60*60)
-            except KeyboardInterrupt:
-                self.write_ultimas_votaciones_publicadas()
-                print("\n*beep boop* Adiós!")
-                exit()
+                print(color.g("OK"))
+            hora_actual = time.time() % (25 * 3600) / 3600
+            if hora_actual > 23 or hora_actual < 9:
+                # Se duerme de 23 a 9 horas
+                if hora_actual < 9:
+                    hora_actual += 24
+                tiempo_durmiendo = 32 - hora_actual
+                print(f"Durmiendo por {tiempo_durmiendo:.2f} horas... ", end='', flush=True)
+                time.sleep(60*60*tiempo_durmiendo)
+                print(color.g("OK"))
+            time.sleep(sleep)
 
     def get_nuevas_votaciones(self):
         ids_recientes, tipos_recientes = api.get_votaciones_recientes()
@@ -150,7 +156,12 @@ class Bot:
 
 if __name__ == "__main__":
     bot = Bot()
-    bot.run()
+    try:
+        bot.run()
+    except KeyboardInterrupt:
+        bot.write_ultimas_votaciones_publicadas()
+        print("\n*beep boop* Adiós!")
+        exit()
 
     exit()
 
