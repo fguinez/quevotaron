@@ -85,7 +85,7 @@ class Bot:
             self.subir_a_drive(votid)
         return media_paths
 
-    def run(self, sleep=10):
+    def run(self, sleep=30):
         while True:
             try:
                 nuevas_votaciones = self.get_nuevas_votaciones()
@@ -98,6 +98,10 @@ class Bot:
                         print(f"Votación {votid}:", color.r("Error    "))
                         print(err)
                 time.sleep(sleep)
+            except ConnectionError as err:
+                print(err)
+                print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora...")
+                time.sleep(60*60)
             except KeyboardInterrupt:
                 self.write_ultimas_votaciones_publicadas()
                 print("\n*beep boop* Adiós!")
