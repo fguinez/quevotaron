@@ -88,7 +88,7 @@ class Bot:
     def run(self, sleep=30):
         while True:
             try:
-                nuevas_votaciones = []#self.get_nuevas_votaciones()
+                nuevas_votaciones = self.get_nuevas_votaciones()
                 for votid, tipo in nuevas_votaciones:
                     try:
                         print(f"Votación {votid}:", color.y("Pendiente"), end='\r')
@@ -107,9 +107,9 @@ class Bot:
                 # Se duerme de 23 a 9 horas
                 if hora_actual < 9:
                     hora_actual += 24
-                tiempo_durmiendo = 32 - hora_actual
+                tiempo_durmiendo = 33.01 - hora_actual
                 print(f"Durmiendo por {tiempo_durmiendo:.2f} horas... ", end='', flush=True)
-                time.sleep(60*60*tiempo_durmiendo)
+                time.sleep(int(60*60*tiempo_durmiendo))
                 print(color.g("OK"))
             time.sleep(sleep)
 
