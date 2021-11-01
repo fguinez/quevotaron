@@ -3,9 +3,11 @@ from draw import generar_visualizaciones
 from utils import osx, color, str_fecha
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
+from math import ceil
 import tweepy
 import json
 import time
+import datetime as dt
 import os
 from dotenv import dotenv_values
 
@@ -102,14 +104,15 @@ class Bot:
                 print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora... ")
                 time.sleep(60*60)
                 print(color.g("OK"))
-            hora_actual = time.time() % (25 * 3600) / 3600
-            if hora_actual > 23 or hora_actual < 9:
+            hora_actual = dt.datetime.now()
+            if hora_actual.hour > 23 or hora_actual.hour < 9:
                 # Se duerme de 23 a 9 horas
-                if hora_actual < 9:
-                    hora_actual += 24
-                tiempo_durmiendo = 33.01 - hora_actual
-                print(f"Durmiendo por {tiempo_durmiendo:.2f} horas... ", end='', flush=True)
-                time.sleep(int(60*60*tiempo_durmiendo))
+                hora_regreso = dt.datetime(hora_actual.year, hora_actual.month, hora_actual.day, 9)
+                if hora_actual.hour > 23:
+                    hora_regreso += dt.timedelta(days=1)
+                diff = (hora_regreso - hora_actual).total_seconds()
+                print(f"Durmiendo por {diff/60/60:.2f} horas... ", end='', flush=True)
+                time.sleep(ceil(diff))
                 print(color.g("OK"))
             time.sleep(sleep)
 
@@ -170,8 +173,8 @@ if __name__ == "__main__":
     votids = bot.get_nuevas_votaciones()
     #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
     #print(votids)
-    #votids = [36725]
-    for votid, tipo in votids[-3:]:
+    votids = [(36725, 'mixta')]
+    for votid, tipo in votids:
         print(votid)
         try:
             paths = bot.procesar_votid(votid, tipo, tweet=False, cloud=False, fecha=True)
