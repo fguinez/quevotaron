@@ -44,7 +44,7 @@ def get_militancia(militancias):
                 ultima_militancia = "IND"
     return ultima_militancia
 
-def get_militancias(filename="militancias.csv"):
+def get_militancias(filename="integrantes.csv"):
     path = f"{path_base}/data/{filename}"
     if os.path.isfile(path):                            # En caso de que el archivo ya exista, se lee
         with open(path, 'r') as file:
@@ -76,7 +76,7 @@ def partido2abreviacion(nombre):
     return abreviaciones[nombre.lower()]
 
 # Recibe el nombre de una bancada y retorna la abreviación de la coalición respectiva
-def coalicion2abreviacion(nombre):
+def bancada2abreviacion(nombre):
     path = f"{path_base}/data/bancadas.csv"
     with open(path, 'r') as file:
         lines = file.readlines()
@@ -106,7 +106,7 @@ def _get_coalicion(diputado, partido=""):
     coalicion = list(filter(regla, info.text.split("\n")))[0]
     coalicion = coalicion.strip().split(": ")[-1]
     coalicion = coalicion.replace(',', '')
-    coalicion = coalicion2abreviacion(coalicion)
+    coalicion = bancada2abreviacion(coalicion)
     # Excepciones
     if partido == "FRVS":
         coalicion = "AD"
@@ -147,4 +147,4 @@ if __name__ == "__main__":
     # Zona de pruebas
     #print(get_diputado(945))
         
-    get_militancias("militancias.csv")
+    get_militancias("integrantes.csv")
