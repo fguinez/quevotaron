@@ -4,6 +4,7 @@ tmp
 client_secret_*.apps.googleusercontent.com.json
 settings.yaml
 credentials.json
+main_dip.py
 
 # VSCode
 *.code-workspace
