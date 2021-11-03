@@ -400,7 +400,7 @@ def create_image(titulo='', subtitulo='', tipo='', resultado='', quorum='', nquo
                    max_font_size=25)    
 
     # Escribir banner inferior con más información
-    text = f"@QueVotaron   |   {fecha}   |   #Votación{votid}"
+    text = f"@QueVotaron   |   {fecha}   |   #VotaciónDiputados{votid}"
     posicion_banner = (im.size[0]//2, im.size[1]-40)
     draw.text(posicion_banner, text, font=footnote, fill='#9999AA', anchor="mt")
     return im
