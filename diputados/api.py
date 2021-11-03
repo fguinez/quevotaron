@@ -94,6 +94,7 @@ def get_diputados_vigentes(force_request=False):
     path = f'{path_base}/data/diputados_vigentes.xml'
     url = 'http://opendata.camara.cl/wscamaradiputados.asmx/getDiputados_Vigentes'
     data = _get_data(path, url, force_request=force_request, parser='xml')
+    # TODO: Retornar una lista con los id de los diputados
     return data
 
 # Obtiene la información histórica de todos los diputados que alguna vez ejercieron

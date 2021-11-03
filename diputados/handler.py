@@ -132,6 +132,8 @@ def create_diputado(diputado, militancia):
     return Diputado(id, nombre, partido, coalicion)
 
 def get_diputados():
+    # TODO: Obtener toda la información de integrantes.csv
+    # Esto implica fusionar esta función con get_militancias
     diputados_vigentes = api.get_diputados_vigentes()
     militancias = get_militancias()
     diputados = {}
