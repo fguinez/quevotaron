@@ -4,6 +4,7 @@ from utils import osx, color, str_fecha
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from math import ceil
+from requests.exceptions import ConnectionError
 import tweepy
 import json
 import time
