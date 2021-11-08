@@ -81,7 +81,10 @@ class Bot:
             # Twittea votid
             if fecha:
                 fecha = str_fecha(votacion_info['fecha'])
-            self.tweet_votacion(votid, media_paths, fecha=fecha)
+            proyecto_ley = votacion_info['proyecto']
+            if proyecto_ley:
+                proyecto_ley = proyecto_ley.split('-')[0]
+            self.tweet_votacion(votid, media_paths, fecha=fecha, proyecto_ley=proyecto_ley)
         self.write_votacion_info(votacion_info)
         if cloud:
             # Sube la info a Google Drive
@@ -126,13 +129,15 @@ class Bot:
         nuevas_votaciones = sorted(nuevas_votaciones, key=lambda v: v[0])
         return list(nuevas_votaciones)
 
-    def tweet_votacion(self, votid, media_paths, fecha=None):
+    def tweet_votacion(self, votid, media_paths, fecha=None, proyecto_ley=""):
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
         tweet_text = f'#VotaciónDiputados{votid}\n\n'
         if fecha:
             tweet_text += f'Fecha: {fecha}\n'
         tweet_text += f'Detalle: {link}'
+        if proyecto_ley:
+            tweet_text += f'\n#Proyecto{proyecto_ley}'
         media_ids = [self.twitter.media_upload(i).media_id_string  for i in media_paths]
         status = self.twitter.update_status(status=tweet_text, media_ids=media_ids)
         self.ultimas_votaciones_publicadas.append(votid)
@@ -170,18 +175,15 @@ if __name__ == "__main__":
     exit()
 
     # Debug
-    votids = osx.get_gen_votids()
-    votids = bot.get_nuevas_votaciones()
+    #votids = osx.get_gen_votids()
+    #votids = bot.get_nuevas_votaciones()
     #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
-    #print(votids)
-    votids = [(36725, 'mixta')]
-    for votid, tipo in votids:
-        print(votid)
+    ##print(votids)
+    #votids = [(36725, 'mixta')]
+    for votid in range(36443, 37247):
         try:
-            paths = bot.procesar_votid(votid, tipo, tweet=False, cloud=False, fecha=True)
+            paths = bot.procesar_votid(votid, "", tweet=False, cloud=False, fecha=True)
+            print(votid)
         except IndexError as err:
             print(votid, "no existe")
-            continue
-        for p in paths:
-            print(p)
-        print()
+            os.remove(f'tmp/html/{votid}.html')
