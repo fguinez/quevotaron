@@ -35,11 +35,14 @@ class Diputado:
             self.pareo_id = pareo_id
 
 class Votacion:
-    def __init__(self, id, titulo, subtitulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos):
-        self.id         = int(id)
+    def __init__(self, id_, titulo, subtitulo, proyecto, fecha, sesion, tramite, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos):
+        self.id         = int(id_)
         self.titulo     = titulo
         self.subtitulo  = subtitulo
+        self.proyecto   = proyecto
         self.fecha      = time.strptime(fecha, '%d %m %Y')
+        self.sesion     = sesion
+        self.tramite    = tramite
         self.tipo       = tipo
         self.resultado  = resultado
         self.quorum     = self.get_quorum(quorum)
@@ -59,6 +62,12 @@ class Votacion:
         self.en_contra_coalicion  = {}
         self.ausentes_coalicion   = {}
         self.pareos_coalicion = []
+
+        self.a_favor_diputado    = []
+        self.abstencion_diputado = []
+        self.en_contra_diputado  = []
+        self.ausentes_diputado   = []
+        self.pareos_diputado = []
 
         self.generar_detalle(votos)
 
@@ -85,6 +94,7 @@ class Votacion:
             diputado2.votar("Pareo", pareo_id=dipid1)
             self.pareos_partido.append([diputado1.partido, diputado2.partido])
             self.pareos_coalicion.append([diputado1.coalicion, diputado2.coalicion])
+            self.pareos_diputado.append([diputado1.id, diputado2.id])
 
     def generar_detalle(self, votos):
         self.generar_votos(votos, "A favor")
@@ -97,16 +107,20 @@ class Votacion:
             if diputado.ausente:
                 self.append(self.ausentes_partido,   diputado.partido)
                 self.append(self.ausentes_coalicion, diputado.coalicion)
+                self.ausentes_diputado.append(diputado.id)
             else:
                 if diputado.voto == "A favor":
                     self.append(self.a_favor_partido,   diputado.partido)
                     self.append(self.a_favor_coalicion, diputado.coalicion)
+                    self.a_favor_diputado.append(diputado.id)
                 if diputado.voto == "Abstienen":
                     self.append(self.abstencion_partido,   diputado.partido)
                     self.append(self.abstencion_coalicion, diputado.coalicion)
+                    self.abstencion_diputado.append(diputado.id)
                 if diputado.voto == "En contra":
                     self.append(self.en_contra_partido,   diputado.partido)
                     self.append(self.en_contra_coalicion, diputado.coalicion)
+                    self.en_contra_diputado.append(diputado.id)
 
     @staticmethod
     def append(my_dict, elem):
@@ -155,18 +169,22 @@ class Votacion:
             "id": self.id,
             "titulo": self.titulo,
             "subtitulo": self.subtitulo,
+            "proyecto": self.proyecto,
             "fecha": self.fecha,
+            "sesion": self.sesion,
+            "tramite": self.tramite,
             "tipo": self.tipo,
             "resultado": self.resultado,
             "quorum": self.quorum,
             "nquorum": self.nquorum,
-            "info_por_partido": self.info_por_partido,
-            "info_por_coalicion": self.info_por_coalicion
+            "votos_por_partido": self.votos_por_partido,
+            "votos_por_coalicion": self.votos_por_coalicion,
+            "votos_por_diputado": self.votos_por_diputado
         }
 
     @property
     # Entrega la información de la votación segmentada por partido
-    def info_por_partido(self):
+    def votos_por_partido(self):
         opcionesH = {
             "A favor": self.a_favor_partido,
             "Abstienen": self.abstencion_partido,
@@ -179,7 +197,7 @@ class Votacion:
 
     @property
     # Entrega la información de la votación segmentada por coalición
-    def info_por_coalicion(self):
+    def votos_por_coalicion(self):
         opcionesH = {
             "A favor": self.a_favor_coalicion,
             "Abstienen": self.abstencion_coalicion,
@@ -189,6 +207,19 @@ class Votacion:
             "Ausentes": self.ausentes_coalicion
         }
         return opcionesH, opcionesV, self.pareos_coalicion
+
+    @property
+    # Entrega la información de la votación indicando los ids de los diputados
+    def votos_por_diputado(self):
+        opcionesH = {
+            "A favor": self.a_favor_diputado,
+            "Abstienen": self.abstencion_diputado,
+            "En contra": self.en_contra_diputado
+        }
+        opcionesV = {
+            "Ausentes": self.ausentes_diputado
+        }
+        return opcionesH, opcionesV, self.pareos_diputado
 
     def __str__(self):
         text  = ""

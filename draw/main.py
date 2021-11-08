@@ -29,8 +29,8 @@ def generar_visualizaciones(votid, votacion_info, titulo=None, path='tmp/visuali
     resultado              = votacion_info['resultado']
     quorum                 = votacion_info['quorum']
     nquorum                = votacion_info['nquorum']
-    votacion_por_partido   = votacion_info['info_por_partido']
-    votacion_por_coalicion = votacion_info['info_por_coalicion']
+    votacion_por_partido   = votacion_info['votos_por_partido']
+    votacion_por_coalicion = votacion_info['votos_por_coalicion']
     fecha                  = str_fecha(votacion_info['fecha'], sep='-')
 
     # Si no fue ingresado como argumento, rescatamos el título de votacion_info

@@ -34,28 +34,43 @@ def get_titulo(votacion_info):
 
 # Obtiene el subtítulo de una votación por medio de su HTML
 def get_subtitulo(votacion_info):
-    titulo = _get_data(votacion_info, "artículo")
-    return titulo
+    subtitulo = _get_data(votacion_info, "artículo")
+    return subtitulo
+
+# Obtiene el id de proyecto de ley asociado a una votación por medio de su HTML
+def get_proyecto(votacion_info):
+    proyecto = _get_data(votacion_info, "proyecto ley")
+    return proyecto
 
 # Obtiene la fecha de una votación por medio de su HTML
 def get_fecha(votacion_info):
     fecha = _get_data(votacion_info, "fecha")
     return _replace_month(fecha)
 
+# Obtiene la sesión en que se realizó una votación por medio de su HTML
+def get_sesion(votacion_info):
+    texto = _get_data(votacion_info, "sesión")
+    return texto
+
+# Obtiene el trámite en que se encuentra el proyecto relacionado a una votación por medio de su HTML
+def get_tramite(votacion_info):
+    texto = _get_data(votacion_info, "trámite")
+    return texto
+
 # Obtiene el tipo de una votación por medio de su HTML
 def get_tipo(votacion_info):
     resultado = _get_data(votacion_info, "tipo de votación")
-    return resultado
-
-# Obtiene el resultado de la votación por medio de su HTML
-def get_resultado(votacion_info):
-    resultado = _get_data(votacion_info, "resultado")
     return resultado
 
 # Obtiene el quorum de la votación por medio de su HTML
 def get_quorum(votacion_info):
     quorum = _get_data(votacion_info, "quorum")
     return quorum
+
+# Obtiene el resultado de la votación por medio de su HTML
+def get_resultado(votacion_info):
+    resultado = _get_data(votacion_info, "resultado")
+    return resultado
 
 # Obtiene la cantidad de votos a favor de la votación por medio de su HTML
 def get_a_favor(votacion_info):
@@ -76,12 +91,15 @@ def get_en_contra(votacion_info):
     return int(en_contra)
 
 # Obtiene el objeto votación asociado al id entregado
-def get_votacion(id, path=f'tmp/html'):
+def get_votacion(id_, path=f'tmp/html'):
     diputados = get_diputados()
-    votacion_info = api.get_votacion(id, path)
+    votacion_info = api.get_votacion(id_, path)
     titulo     = get_titulo(votacion_info)
     subtitulo  = get_subtitulo(votacion_info)
+    proyecto   = get_proyecto(votacion_info)
     fecha      = get_fecha(votacion_info)
+    sesion     = get_sesion(votacion_info)
+    tramite    = get_tramite(votacion_info)
     tipo       = get_tipo(votacion_info)
     resultado  = get_resultado(votacion_info)
     quorum     = get_quorum(votacion_info)
@@ -89,7 +107,10 @@ def get_votacion(id, path=f'tmp/html'):
     abstencion = get_abstencion(votacion_info)
     en_contra  = get_en_contra(votacion_info)
     votos      = votacion_info.find_all('h3')
-    return Votacion(id, titulo, subtitulo, fecha, tipo, resultado, quorum, a_favor, abstencion, en_contra, diputados, votos)
+    return Votacion(
+        id_, titulo, subtitulo, proyecto, fecha, sesion, tramite, tipo,
+        resultado, quorum, a_favor, abstencion, en_contra, diputados, votos
+    )
 
 
 
