@@ -1,6 +1,6 @@
 from diputados import api, votaciones
 from draw import generar_visualizaciones
-from utils import osx, color, str_fecha
+from utils import osx, color, str_fecha, emoji_resultado
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from math import ceil
@@ -81,10 +81,9 @@ class Bot:
             # Twittea votid
             if fecha:
                 fecha = str_fecha(votacion_info['fecha'])
-            proyecto_ley = votacion_info['proyecto']
-            if proyecto_ley:
-                proyecto_ley = proyecto_ley.split('-')[0]
-            self.tweet_votacion(votid, media_paths, fecha=fecha, proyecto_ley=proyecto_ley)
+            if votacion_info['proyecto']:
+                votacion_info['proyecto'] = votacion_info['proyecto'].split('-')[0]
+            self.tweet_votacion(votacion_info, media_paths, fecha=fecha)
         self.write_votacion_info(votacion_info)
         if cloud:
             # Sube la info a Google Drive
@@ -129,10 +128,13 @@ class Bot:
         nuevas_votaciones = sorted(nuevas_votaciones, key=lambda v: v[0])
         return list(nuevas_votaciones)
 
-    def tweet_votacion(self, votid, media_paths, fecha=None, proyecto_ley=""):
+    def tweet_votacion(self, votacion_info, media_paths, fecha=None):
+        votid        = votacion_info['id']
+        proyecto_ley = votacion_info['proyecto']
+        resultado    = emoji_resultado(votacion_info['resultado'])
         # Máximo de caracteres sin link: 256
         link = f'https://www.camara.cl/legislacion/sala_sesiones/votacion_detalle.aspx?prmIdVotacion={votid}'
-        tweet_text = f'#VotaciónDiputados{votid}\n\n'
+        tweet_text = f'#VotaciónDiputados{votid} {resultado}\n\n'
         if fecha:
             tweet_text += f'Fecha: {fecha}\n'
         tweet_text += f'Detalle: {link}'
