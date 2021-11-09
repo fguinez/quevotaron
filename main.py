@@ -68,7 +68,7 @@ class Bot:
     def write_votacion_info(self, votacion_info):
         path = self.paths['json'] + f"/{votacion_info['id']}.json"
         with open(path, 'w') as file:
-            json.dump(votacion_info, file)
+            json.dump(votacion_info, file, indent=4)
 
     def procesar_votid(self, votid, tipo=None, tweet=True, cloud=True, fecha=False):
         # Obtiene datos de votid
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
     ##print(votids)
     #votids = [(36725, 'mixta')]
-    for votid in range(36443, 37247):
+    for votid in range(37240, 37247):
         try:
             paths = bot.procesar_votid(votid, "", tweet=False, cloud=False, fecha=True)
             print(votid)
