@@ -24,7 +24,7 @@ url_base2 = 'http://opendata.camara.cl/wscamaradiputados.asmx/'
 def get_html(url):
     html_str = requests.get(url = url).text
     if len(html_str) < 500:                                  # Si no llega respuesta con contenido
-            raise Exception(f"Respuesta incompleta. Intenta más tarde.\nURL: {url}")
+            raise requests.exceptions.ConnectionError(f"Respuesta incompleta. Intenta más tarde.\nURL: {url}")
     return html_str
 
 # Obtiene el html disponible en URL
