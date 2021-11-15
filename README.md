@@ -29,6 +29,10 @@ Para instalar las librerías necesarias para correr el generador, ejecutar la si
 pip install -r requirements.txt
 ```
 
+## Aprendizajes
+
+- **D3.js >>>>> PIL:** La generación de imágenes fue realizada con la librería PIL de Python, principalmente motivado por aprender una herramienta nueva. Sin embargo, el trabajo fue notoriamente más dificil y limitado que lo esperado, una mejor alternativa habría sido utilizar D3.js o alguna otra herramienta de edición vectorial.
+
 ## Guía de estilo
 
 Este repositorio utiliza el idioma español tanto en su documentación como en el uso de `git flow`. Esto se fundamenta en el contexto chileno del proyecto QueVotaron, se busca facilitar y fomentar el uso nacional de la herramienta, por sobre un acceso universal tradicional. No está de más recordar que, en un proyecto de código abierto descontextualizado, sigue siendo una mejor práctica utilizar el idioma Inglés para la documentación.
