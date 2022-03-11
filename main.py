@@ -5,6 +5,7 @@ from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from math import ceil
 from requests.exceptions import ConnectionError
+import builtins
 import tweepy
 import json
 import time
@@ -14,6 +15,15 @@ from dotenv import dotenv_values
 
 env = dotenv_values(osx.this_file()+"/.env")
 
+
+
+
+def print(*args, **kwargs):
+    if len(args):
+        now = dt.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+        return builtins.print(f'[{now}]', *args, **kwargs)
+    else:
+        return builtins.print(*args, **kwargs)
 
 
 
@@ -171,7 +181,8 @@ if __name__ == "__main__":
         bot.run()
     except KeyboardInterrupt:
         bot.write_ultimas_votaciones_publicadas()
-        print("\n*beep boop* Adiós!")
+        print()
+        print("*beep boop* Adiós!")
         exit()
 
     exit()
