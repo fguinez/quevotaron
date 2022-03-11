@@ -112,6 +112,7 @@ class Bot:
                     except Exception as err:
                         print(f"Votación {votid}:", color.r("Error    "))
                         print(err)
+                self.write_ultimas_votaciones_publicadas()
             except ConnectionError as err:
                 print(err)
                 print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora... ")
