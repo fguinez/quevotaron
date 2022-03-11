@@ -100,7 +100,7 @@ class Bot:
             self.subir_a_drive(votid)
         return media_paths
 
-    def run(self, sleep=30):
+    def run(self, sleep=60):
         while True:
             try:
                 nuevas_votaciones = self.get_nuevas_votaciones()
