@@ -5,6 +5,7 @@ from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from math import ceil
 from requests.exceptions import ConnectionError
+import builtins
 import tweepy
 import json
 import time
@@ -14,6 +15,15 @@ from dotenv import dotenv_values
 
 env = dotenv_values(osx.this_file()+"/.env")
 
+
+
+
+def print(*args, **kwargs):
+    if len(args):
+        now = dt.datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+        return builtins.print(f'[{now}]', *args, **kwargs)
+    else:
+        return builtins.print(*args, **kwargs)
 
 
 
@@ -90,7 +100,7 @@ class Bot:
             self.subir_a_drive(votid)
         return media_paths
 
-    def run(self, sleep=30):
+    def run(self, sleep=60):
         while True:
             try:
                 nuevas_votaciones = self.get_nuevas_votaciones()
@@ -102,6 +112,7 @@ class Bot:
                     except Exception as err:
                         print(f"Votación {votid}:", color.r("Error    "))
                         print(err)
+                self.write_ultimas_votaciones_publicadas()
             except ConnectionError as err:
                 print(err)
                 print(color.r("ERROR:"), "Ha ocurrido un error de conexión. Esperando 1 hora... ")
@@ -171,7 +182,8 @@ if __name__ == "__main__":
         bot.run()
     except KeyboardInterrupt:
         bot.write_ultimas_votaciones_publicadas()
-        print("\n*beep boop* Adiós!")
+        print()
+        print("*beep boop* Adiós!")
         exit()
 
     exit()
