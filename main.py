@@ -179,8 +179,10 @@ class Bot:
 if __name__ == "__main__":
     bot = Bot()
     try:
+        print("Ejecutando...")
         bot.run()
     except KeyboardInterrupt:
+        print("Escribiendo votaciones publicadas...")
         bot.write_ultimas_votaciones_publicadas()
         print()
         print("*beep boop* Adiós!")
