@@ -65,7 +65,7 @@ coaliciones = {
     'AD':  ['Apruebo Dignidad',    '#e6194B'],
     'NPC': ['Nuevo Pacto Social',  '#3cb44b'],
     'PDG': ['Partido de la Gente', '#ffe119'],
-    'CV':  ['Chile Vamos',         '#4363d8'],
+    'CV':  ['Chile Vamos',         '#42d4f4'],
     'REP': ['Republicanos',        '#000075'],
     'SC':  ['Sin Coalición',       '#a9a9a9']
 }
