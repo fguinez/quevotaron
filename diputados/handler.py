@@ -44,9 +44,9 @@ def get_militancia(militancias):
                 ultima_militancia = "IND"
     return ultima_militancia
 
-def get_militancias(filename="militancias.csv"):
+def get_militancias(filename="militancias.csv", force_request=False):
     path = f"{path_base}/data/{filename}"
-    if os.path.isfile(path):                            # En caso de que el archivo ya exista, se lee
+    if os.path.isfile(path) and not force_request:                   # En caso de que el archivo ya exista, se lee
         with open(path, 'r') as file:
             file.readline()                                          # Ignorar encabezado
             lines = file.readlines()
@@ -56,12 +56,12 @@ def get_militancias(filename="militancias.csv"):
         return militancias
     # En caso de que el archivo no exista, se escribe
     militancias = {}
-    diputados_vigentes = api.get_diputados_vigentes()
+    diputados_vigentes = api.get_diputados_vigentes(force_request=force_request)
     ids_vigentes = [int(d.DIPID.string) for d in diputados_vigentes.find_all('Diputado')]
     with open(path, 'w') as file:
         file.write("id,partido,coalicion,nombre\n")
         for dipid in ids_vigentes:
-            diputado = get_diputado(dipid)
+            diputado = get_diputado(dipid, force_request=force_request)
             file.write(f"{dipid},{diputado.partido},{diputado.coalicion},{diputado.nombre}\n")
             militancias[dipid] = Militancia(diputado.partido, diputado.coalicion, diputado.nombre)
     return militancias
@@ -113,8 +113,8 @@ def _get_coalicion(diputado, partido=""):
     return coalicion
 
 # Obtiene la información de un diputado en particular (en ocasiones, logra más detalle que get_diputados)
-def get_diputado(dipid):
-    diputado = api.get_diputado(dipid)
+def get_diputado(dipid, force_request=False):
+    diputado = api.get_diputado(dipid, force_request=force_request)
     h2 = diputado.find("h2").text                 # Se encuentra el título
     nombre = " ".join(h2.split(" ")[1:])          # Se elimina 'Diputadx' del título, dejando solo el nombre
     partido = _get_partido(diputado)
@@ -146,5 +146,5 @@ def get_diputados():
 if __name__ == "__main__":
     # Zona de pruebas
     #print(get_diputado(945))
-        
-    get_militancias("militancias.csv")
+
+    get_militancias("militancias.csv", force_request=True)

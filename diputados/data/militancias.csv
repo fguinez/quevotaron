@@ -4,7 +4,7 @@ id,partido,coalicion,nombre
 1059,RN,CV,Ximena Ossandón Irarrázabal
 1025,RN,CV,Catalina Del Real Mihovilovic
 1105,DC,NPC,Héctor Barría Angulo
-971,RN,CV,Bernardo Berger Fett
+971,IND,CV,Bernardo Berger Fett
 1115,IND,AD,Mercedes Bulnes Núñez
 1019,RN,CV,José Miguel Castro Bascuñán
 1124,IND,NPC,Tomás De Rementería Venegas
@@ -25,16 +25,16 @@ id,partido,coalicion,nombre
 1159,PC,AD,Lorena Pizarro Sierra
 1180,RD,AD,Consuelo Veloso Ávila
 1164,IND,AD,Marcela Riquelme Aliaga
-1102,PCC,SC,Roberto Arroyo Muñoz
+1102,PDG,PDG,Roberto Arroyo Muñoz
 973,PC,AD,Karol Cariola Oliva
 1134,IND,NPC,Andrés Jouannet Valderrama
 1050,RN,CV,Miguel Mellado Suazo
-1155,PCC,SC,Rubén Darío Oyarzo Figueroa
+1155,PDG,PDG,Rubén Darío Oyarzo Figueroa
 1074,PC,AD,Marisela Santibáñez Novoa
 1028,RN,CV,Eduardo Durán Salinas
 1162,PC,AD,Matías Ramírez Pascal
 1143,UDI,CV,Cristóbal Martínez Ramírez
-1123,PREP,SC,Gonzalo De la Carrera Correa
+1123,PREP,REP,Gonzalo De la Carrera Correa
 1142,PS,NPC,Daniel Manouchehri Lobos
 1046,RN,CV,Andrés Longton Herrera
 1121,UDI,CV,Eduardo Cornejo Lagos
@@ -50,9 +50,9 @@ id,partido,coalicion,nombre
 1111,UDI,CV,Fernando Bórquez Montecinos
 1138,UDI,CV,Henry Leal Bizama
 1003,UDI,CV,Renzo Trisotti Martínez
-1104,PREP,SC,Chiara Barchiesi Chávez
-1133,PREP,SC,Juan Manuel Irarrázaval Rossel
-1152,PREP,SC,Gloria Naveillan Arriagada
+1104,PREP,REP,Chiara Barchiesi Chávez
+1133,PREP,REP,Juan Irarrázaval Rossel
+1152,PREP,REP,Gloria Naveillan Arriagada
 1031,UDI,CV,Juan Fuenzalida Cobo
 1065,UDI,CV,Guillermo Ramírez Diez
 1177,PC,AD,Carolina Tello Rojas
@@ -61,18 +61,18 @@ id,partido,coalicion,nombre
 1058,RD,AD,Maite Orsini Pascal
 803,IND,NPC,René Alinco Bustos
 1175,IND,NPC,Cristián Tapia Ramos
-1098,PCC,SC,Yovana Ahumada Palma
-948,PCC,SC,Gaspar Rivas Sánchez
+1098,PDG,PDG,Yovana Ahumada Palma
+948,PDG,PDG,Gaspar Rivas Sánchez
 1137,IND,NPC,Tomás Lagomarsino Guzmán
-1156,IND,SC,Hernán Palma Pérez
+1156,IND,AD,Hernán Palma Pérez
 872,FRVS,AD,Jaime Mulet Martínez
 1034,PEV,SC,Félix González Gatica
-1161,IND,SC,Francisco Pulgar Castillo
-1110,IND,SC,Carlos Bianchi Chelech
+1161,IND,PDG,Francisco Pulgar Castillo
+1110,IND,NPC,Carlos Bianchi Chelech
 1131,RN,CV,Mauro González Villarroel
 1096,PC,AD,María Candelaria Acevedo Sáez
 1009,UDI,CV,Jorge Alessandri Vergara
-1100,PREP,SC,Cristián Araya Lerdo de Tejada
+1100,PREP,REP,Cristián Araya Lerdo de Tejada
 1101,IND,SC,Mónica Arce Castro
 1103,PS,NPC,Danisa Astudillo Peiretti
 1012,PC,AD,Boris Barrera Moreno
@@ -81,9 +81,9 @@ id,partido,coalicion,nombre
 815,UDI,CV,Sergio Bobadilla Muñoz
 1112,PS,NPC,Ana María Bravo Castro
 1116,IND,NPC,Felipe Camaño Cárdenas
-1017,IND,CV,Álvaro Carter Fernández
+1017,UDI,CV,Álvaro Carter Fernández
 1117,PC,AD,Nathalie Castillo Rojas
-1119,PDG,SC,Sara Concha Smith
+1119,PCC,CV,Sara Concha Smith
 1120,IND,CV,María Luisa Cordero Velásquez
 1122,PC,AD,Luis Alberto Cuello Peña y Lillo
 1125,PEV,SC,Viviana Delgado Riquelme
@@ -94,49 +94,49 @@ id,partido,coalicion,nombre
 1132,EVOP,CV,Jorge Guzmán Zepeda
 1037,CS,AD,Diego Ibáñez Cotroneo
 1038,PS,NPC,Marcos Ilabaca Cerda
-1040,RN,CV,Harry Jürgensen Rundshagen
+1040,IND,REP,Harry Jürgensen Rundshagen
 989,UDI,CV,Joaquín Lavín León
-1139,IND,SC,Enrique Lee Flores
+1139,PRI,CV,Enrique Lee Flores
 1140,UDI,CV,Daniel Lilayu Vivanco
 1141,PL,NPC,Luis Malla Valenzuela
 1048,PPD,NPC,Carolina Marzán Pinto
-1145,PCC,SC,Karen Medina Vásquez
-1146,PREP,SC,José Carlos Meza Pereira
+1145,PDG,PDG,Karen Medina Vásquez
+1146,PREP,REP,José Carlos Meza Pereira
 1051,CO,AD,Claudia Mix Jiménez
 1147,PPD,NPC,Helia Molina Milman
 1053,UDI,CV,Cristhian Moreira Barros
-1150,PREP,SC,Benjamín Moreno Bascur
+1150,PREP,REP,Benjamín Moreno Bascur
 1054,RN,CV,Francesca Muñoz González
 1151,IND,AD,Camila Musante Müller
 1153,RD,AD,Ericka Ñanco Vásquez
-1154,IND,SC,Mauricio Ojeda Rebolledo
-1158,PCC,SC,Víctor Alejandro Pino Fuentes
+1154,IND,REP,Mauricio Ojeda Rebolledo
+1158,PDG,PDG,Víctor Alejandro Pino Fuentes
 1160,PC,AD,Alejandra Placencia Cabello
 1067,RN,CV,Hugo Rey Martínez
 1068,CO,AD,Camila Rojas Valderrama
-1165,PREP,SC,Agustín Romero Leiva
-1069,RN,CV,Leonidas Romero Sáez
+1165,PREP,REP,Agustín Romero Leiva
+1069,RN,REP,Leonidas Romero Sáez
 1166,IND,CV,Natalia Romero Talguia
 1070,IND,AD,Patricio Rosas Barrientos
 1167,RD,AD,Jaime Sáez Quiroz
 1168,DC,NPC,Jorge Saffirio Espinoza
 1169,IND,AD,Clara Sagardia Cabezas
-1170,PREP,SC,Luis Sánchez Ossa
+1170,PREP,REP,Luis Sánchez Ossa
 1073,PS,NPC,Juan Santana Castillo
 953,RN,CV,Frank Sauerbaum Muñoz
 1075,RN,CV,Diego Schalper Sepúlveda
 1171,CO,AD,Emilia Schneider Videla
-1172,IND,SC,Stephan Schubert Rubio
+1172,IND,REP,Stephan Schubert Rubio
 1076,PR,NPC,Alexis Sepúlveda Soto
 1173,PC,AD,Daniela Serrano Salazar
 1002,PS,NPC,Leonardo Soto Ferrada
-1077,IND,NPC,Raúl Soto Mardones
+1077,PPD,NPC,Raúl Soto Mardones
 1174,UDI,CV,Marco Antonio Sulantay Olivares
 1176,IND,CV,Hotuiti Teao Drago
-1178,IND,SC,Héctor Ulloa Aguilera
+1178,IND,NPC,Héctor Ulloa Aguilera
 1179,DC,NPC,Alberto Undurraga Vicuña
 1081,EVOP,CV,Francisco Undurraga Gazitúa
-1082,RN,CV,Cristóbal Urruticoechea Ríos
+1082,PREP,REP,Cristóbal Urruticoechea Ríos
 1182,IND,NPC,Sebastián Videla Castillo
 917,UDI,CV,Gastón Von Mühlenbrock Zamora
 1183,UDI,CV,Flor Weisse Novoa
@@ -150,7 +150,7 @@ id,partido,coalicion,nombre
 991,PL,NPC,Vlado Mirosevic Verdugo
 999,RN,CV,Jorge Rathgeb Schifferli
 1013,PL,NPC,Alejandro Bernales Maldonado
-1135,PREP,SC,Johannes Kaiser Barents-Von Hohenhagen
+1135,PREP,REP,Johannes Kaiser Barents-Von Hohenhagen
 1144,IND,CV,Christian Matheson Villán
 1149,RN,CV,Carla Morales Maldonado
 1036,IND,AD,Tomás Hirsch Goldschmidt

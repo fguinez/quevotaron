@@ -32,41 +32,42 @@ partidos = {
 # Paleta de partidos (solo legalizados)
 partidos = {
     # Apruebo Dignidad - Frente Amplio
-    'CS':   ['Convergencia Social',                  '#911eb4'],# 
-    'CO':   ['Comunes',                              '#f032e6'],#
-    'RD':   ['Revolución Democrátiva',               '#7700DD'],#
+    'CS':   ['Convergencia Social',                  '#911eb4'],
+    'CO':   ['Comunes',                              '#f032e6'],
+    'RD':   ['Revolución Democrátiva',               '#7700DD'],
     # Apruebo Dignidad - Chile Digno
-    'PC':   ['Partico Comunista',                    '#e6194B'],#
-    'FRVS': ['Federación Regionalista Verde Social', '#800000'],#
+    'PC':   ['Partico Comunista',                    '#e6194B'],
+    'FRVS': ['Federación Regionalista Verde Social', '#800000'],
     # Unidad Constituyente
-    'PS':   ['Partido Socialista',                   '#fabed4'],#
-    'PL':   ['Partido Liberal',                      '#808000'],#
-    'PPD':  ['Partido Por la Democracia',            '#bfef45'],#
-    'PR':   ['Partido Radical',                      '#3cb44b'],#
-    'DC':   ['Democracia Cristiana',                 '#aaffc3'],#
+    'PS':   ['Partido Socialista',                   '#fabed4'],
+    'PL':   ['Partido Liberal',                      '#808000'],
+    'PPD':  ['Partido Por la Democracia',            '#bfef45'],
+    'PR':   ['Partido Radical',                      '#3cb44b'],
+    'DC':   ['Democracia Cristiana',                 '#aaffc3'],
     # Chile Vamos
-    'EVOP': ['Evopoli',                              '#469990'],#
-    'RN':   ['Renovación Nacional',                  '#42d4f4'],#
-    'UDI':  ['Unión Demócrata Independiente',        '#4363d8'],# 
+    'PRI':  ['Partido Regionalista Independiente',   '#004040'],
+    'EVOP': ['Evopoli',                              '#469990'],
+    'RN':   ['Renovación Nacional',                  '#42d4f4'],
+    'UDI':  ['Unión Demócrata Independiente',        '#4363d8'],
     # Frente Social Cristiano
-    'PCC':  ['Partico Conservador Cristiano',        '#2233AA'],#
-    'PREP': ['Partido Republicano',                  '#000075'],#  
+    'PCC':  ['Partico Conservador Cristiano',        '#2233AA'],
+    'PREP': ['Partido Republicano',                  '#000075'],
     # Sin coalición
-    'PEV':  ['Partido Ecologísta Verde',             '#9A6324'],#
-    'PH':   ['Partido Humanista',                    '#f58231'],#
-    'PDG':  ['Partido de la Gente',                  '#ffe119'],#
-    'IND':  ['Independiente',                        '#a9a9a9'] #
+    'PEV':  ['Partido Ecologísta Verde',             '#9A6324'],
+    'PH':   ['Partido Humanista',                    '#f58231'],
+    'PDG':  ['Partido de la Gente',                  '#ffe119'],
+    'IND':  ['Independiente',                        '#a9a9a9']
 }
 
-['' '' '' '' '' '' '' '' '' '' '' '' ''
- '' '' '' '' 'CO' 'PH']
 
 # Paleta de coaliciones (agrupando bancadas afines)
 coaliciones = {
-    'AD':  ['Apruebo Dignidad',     '#e6194B'],
-    'NPC': ['Nuevo Pacto Social',   '#3cb44b'],
-    'CV':  ['Chile Vamos',          '#4363d8'],
-    'SC':  ['Sin Coalición',        '#a9a9a9']
+    'AD':  ['Apruebo Dignidad',    '#e6194B'],
+    'NPC': ['Nuevo Pacto Social',  '#3cb44b'],
+    'PDG': ['Partido de la Gente', '#ffe119'],
+    'CV':  ['Chile Vamos',         '#4363d8'],
+    'REP': ['Republicanos',        '#000075'],
+    'SC':  ['Sin Coalición',       '#a9a9a9']
 }
 
 # Retorna un color aleatorio
