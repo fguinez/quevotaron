@@ -44,7 +44,7 @@ def get_militancia(militancias):
                 ultima_militancia = "IND"
     return ultima_militancia
 
-def get_militancias(filename="militancias.csv", force_request=True):
+def get_militancias(filename="militancias.csv", force_request=False):
     path = f"{path_base}/data/{filename}"
     if os.path.isfile(path) and not force_request:                   # En caso de que el archivo ya exista, se lee
         with open(path, 'r') as file:

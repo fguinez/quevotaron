@@ -178,6 +178,7 @@ class Bot:
 
 if __name__ == "__main__":
     bot = Bot()
+
     try:
         print("Ejecutando...")
         bot.run()
@@ -196,7 +197,7 @@ if __name__ == "__main__":
     #votids = list(filter(lambda v: int(v) >= 36971 and int(v) < 37071, votids))
     ##print(votids)
     #votids = [(36725, 'mixta')]
-    for votid in range(37240, 37247):
+    for votid in range(38467, 38471):
         try:
             paths = bot.procesar_votid(votid, "", tweet=False, cloud=False, fecha=True)
             print(votid)
