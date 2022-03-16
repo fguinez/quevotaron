@@ -57,6 +57,7 @@ partidos = {
     'PH':   ['Partido Humanista',                    '#f58231'],
     'PDG':  ['Partido de la Gente',                  '#ffe119'],
     'IND':  ['Independiente',                        '#a9a9a9']
+}
 
 
 # Paleta de coaliciones (agrupando bancadas afines)
