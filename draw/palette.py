@@ -34,7 +34,7 @@ partidos = {
     # Apruebo Dignidad - Frente Amplio
     'CS':   ['Convergencia Social',                  '#911eb4'],
     'CO':   ['Comunes',                              '#f032e6'],
-    'RD':   ['Revolución Democrátiva',               '#7700DD'],
+    'RD':   ['Revolución Democrátiva',               '#FF8A8E'],
     # Apruebo Dignidad - Chile Digno
     'PC':   ['Partico Comunista',                    '#e6194B'],
     'FRVS': ['Federación Regionalista Verde Social', '#800000'],
